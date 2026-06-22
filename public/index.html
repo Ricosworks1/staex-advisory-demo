@@ -683,9 +683,13 @@
         // Mark all steps done
         PIPELINE_STEPS.forEach(s => setPipelineStep(s, "done"));
 
-        // Show synthesis
+        // Show synthesis in pipeline panel
         document.getElementById("synthesis-text").textContent = data.synthesis;
         document.getElementById("synthesis-box").classList.remove("hidden");
+
+        // Also post RM answer into the main chat
+        appendMessage("assistant", data.synthesis, "relationship_manager");
+        document.getElementById("chat-messages").scrollTop = 999999;
 
         // Build internal deliberation
         const internals = data.pipeline.slice(0, -1); // exclude RM (that's the synthesis)
