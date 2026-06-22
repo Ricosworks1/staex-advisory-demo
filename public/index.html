@@ -652,28 +652,12 @@
       document.getElementById("pipeline-query-label").textContent = `"${shortMsg}"`;
       document.getElementById("pipeline-status").textContent = "Consulting team…";
 
-      // Advance one step every ~55s to match real Opus agent timing.
-      // Mark current step "running", previous step "done" so progress is visible.
-      let stepIdx = 0;
-      setPipelineStep(PIPELINE_STEPS[0], "running");
-      const stepTimer = setInterval(() => {
-        if (stepIdx < PIPELINE_STEPS.length) setPipelineStep(PIPELINE_STEPS[stepIdx], "done");
-        stepIdx++;
-        if (stepIdx < PIPELINE_STEPS.length) setPipelineStep(PIPELINE_STEPS[stepIdx], "running");
-        if (stepIdx >= PIPELINE_STEPS.length) clearInterval(stepTimer);
-      }, 55000);
-
       try {
-        const abortCtrl = new AbortController();
-        const abortTimer = setTimeout(() => abortCtrl.abort(), 600_000); // 10 min max
         const res = await fetch(`${API_BASE}/pipeline`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: msg }),
-          signal: abortCtrl.signal,
         });
-        clearTimeout(abortTimer);
-        clearInterval(stepTimer);
 
         if (!res.ok) {
           document.getElementById("pipeline-status").textContent = "Error — try again";
@@ -682,21 +666,54 @@
           return;
         }
 
-        const data = await res.json();
+        // Stream SSE events — each agent reports in as it finishes
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buf = "";
+        let finalData = null;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += decoder.decode(value, { stream: true });
+          const lines = buf.split("\n");
+          buf = lines.pop(); // keep incomplete trailing line
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            let ev;
+            try { ev = JSON.parse(line.slice(6)); } catch { continue; }
+            if (ev.type === "agent_start") {
+              setPipelineStep(ev.agent, "running");
+            } else if (ev.type === "agent_done") {
+              setPipelineStep(ev.agent, "done");
+            } else if (ev.type === "done") {
+              finalData = ev;
+            } else if (ev.type === "error") {
+              document.getElementById("pipeline-status").textContent = "Error — try again";
+            }
+          }
+        }
+
+        if (!finalData) {
+          document.getElementById("pipeline-status").textContent = "Error — try again";
+          pipelineBtn.disabled = false;
+          sendBtn.disabled = false;
+          return;
+        }
 
         // Mark all steps done
         PIPELINE_STEPS.forEach(s => setPipelineStep(s, "done"));
 
         // Show synthesis in pipeline panel
-        document.getElementById("synthesis-text").textContent = data.synthesis;
+        document.getElementById("synthesis-text").textContent = finalData.synthesis;
         document.getElementById("synthesis-box").classList.remove("hidden");
 
-        // Also post RM answer into the main chat
-        appendMessage("assistant", data.synthesis, "relationship_manager");
+        // Post RM answer into the main chat
+        appendMessage("assistant", finalData.synthesis, "relationship_manager");
         document.getElementById("chat-messages").scrollTop = 999999;
 
         // Build internal deliberation
-        const internals = data.pipeline.slice(0, -1); // exclude RM (that's the synthesis)
+        const internals = finalData.pipeline.slice(0, -1);
         const content = document.getElementById("deliberation-content");
         internals.forEach(step => {
           const div = document.createElement("div");
@@ -704,24 +721,15 @@
           div.innerHTML = `
             <div class="px-4 py-2 bg-white/3 border-b border-white/5 flex items-center justify-between">
               <span class="text-white/60 text-xs font-medium">${PIPELINE_LABELS[step.agent] || step.agent}</span>
-              <span class="text-white/20 text-xs mono">${step._tokens?.in ?? 0}→${step._tokens?.out ?? 0} tokens · ${step._tokens?.cacheRead ?? 0} cached</span>
             </div>
             <div class="px-4 py-3 text-white/70 text-xs leading-relaxed whitespace-pre-wrap">${step.output}</div>`;
           content.appendChild(div);
         });
 
         document.getElementById("deliberation-toggle").classList.remove("hidden");
-
-        const totalIn = data._debug?.totalTokensIn ?? 0;
-        const totalCached = data._debug?.totalCacheRead ?? 0;
-        document.getElementById("pipeline-status").textContent =
-          `Done · ${totalIn} tokens in · ${totalCached} cached`;
-
-        // Also append RM message to the main chat
-        appendMessage("agent", data.synthesis, "relationship_manager");
+        document.getElementById("pipeline-status").textContent = `Done · ${finalData._debug?.agents ?? 6} agents`;
 
       } catch (e) {
-        clearInterval(stepTimer);
         document.getElementById("pipeline-status").textContent = "Connection error";
       }
 
