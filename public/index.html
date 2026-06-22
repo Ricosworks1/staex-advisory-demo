@@ -518,7 +518,12 @@
         <p class="text-white/20 text-xs mt-1">Intelligence powered by Blockchain Payment Flow Analysis · October 2025 snapshot · <a href="https://webthreepedia.com" target="_blank" class="text-white/30 hover:text-white/60 transition-colors underline">webthreepedia.com</a></p>
       </div>
       <div class="flex items-center gap-4">
-        <p class="text-white/20 text-xs">Directional framework only. Not financial advice.</p>
+        <div>
+          <p class="text-white/20 text-xs">Directional framework only. Not financial advice.</p>
+          <button id="bpf-request-btn" onclick="requestBPF()" class="mt-2 text-xs text-white/30 hover:text-[#e9dd35] transition-colors flex items-center gap-1.5">
+            <span>⬡</span> Request latest BPF analysis
+          </button>
+        </div>
         <div class="flex items-center gap-1.5">
           <div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
           <span class="text-green-400 text-xs">All agents online</span>
@@ -669,6 +674,25 @@ No jargon. No hedging language. Confident, direct, actionable.`,
 
     fetchPrices();
     setInterval(fetchPrices, 60000);
+
+    async function requestBPF() {
+      const btn = document.getElementById("bpf-request-btn");
+      btn.disabled = true;
+      btn.textContent = "⬡ Sending request…";
+      try {
+        const res = await fetch(`${API_BASE}/request-bpf`, { method: "POST" });
+        btn.textContent = res.ok ? "✓ Request sent — team notified" : "✗ Could not send — try again";
+        btn.style.color = res.ok ? "#4ade80" : "#f87171";
+      } catch {
+        btn.textContent = "✗ Connection error";
+        btn.style.color = "#f87171";
+      }
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = "⬡ Request latest BPF analysis";
+        btn.style.color = "";
+      }, 5000);
+    }
 
     // Agent selection
     function selectAgent(el) {
