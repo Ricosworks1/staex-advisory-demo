@@ -45,7 +45,7 @@
       <div class="flex items-center gap-3">
         <div class="text-right">
           <p class="text-white/50 text-xs">Demo Client</p>
-          <p class="text-white text-sm font-medium">Family Office — Geneva</p>
+          <p class="text-white text-sm font-medium">Family Office · Profile 5</p>
         </div>
         <div class="w-8 h-8 rounded-full bg-[#003f4e] border border-white/10 flex items-center justify-center text-xs text-white/60">FO</div>
       </div>
@@ -167,62 +167,68 @@
         <div class="space-y-2">
           <div class="agent-card active cursor-pointer p-4 rounded-xl border border-[#e9dd35] bg-[#003f4e]/80" data-agent="relationship_manager" onclick="selectAgent(this)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[#e9dd35]/10 flex items-center justify-center text-[#e9dd35] text-sm">RM</div>
-              <div>
+              <div class="w-8 h-8 rounded-lg bg-[#e9dd35]/10 flex items-center justify-center text-[#e9dd35] text-sm flex-shrink-0">RM</div>
+              <div class="flex-1 min-w-0">
                 <p class="text-white text-sm font-medium">Relationship Manager</p>
                 <p class="text-white/40 text-xs">Client advisory · Daily briefings</p>
               </div>
-              <div class="ml-auto w-2 h-2 rounded-full bg-[#e9dd35]"></div>
+              <button onclick="event.stopPropagation(); openPersonality('relationship_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
+              <div class="w-2 h-2 rounded-full bg-[#e9dd35] flex-shrink-0"></div>
             </div>
           </div>
           <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="cio" onclick="selectAgent(this)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs">CIO</div>
-              <div>
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">CIO</div>
+              <div class="flex-1 min-w-0">
                 <p class="text-white text-sm font-medium">Chief Investment Officer</p>
                 <p class="text-white/40 text-xs">Strategy · Allocation targets</p>
               </div>
-              <div class="ml-auto w-2 h-2 rounded-full bg-green-400"></div>
+              <button onclick="event.stopPropagation(); openPersonality('cio')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
+              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
             </div>
           </div>
           <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="risk_manager" onclick="selectAgent(this)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs">RM</div>
-              <div>
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">RSK</div>
+              <div class="flex-1 min-w-0">
                 <p class="text-white text-sm font-medium">Risk Manager</p>
                 <p class="text-white/40 text-xs">Hard limits · Drawdown alerts</p>
               </div>
-              <div class="ml-auto w-2 h-2 rounded-full bg-green-400"></div>
+              <button onclick="event.stopPropagation(); openPersonality('risk_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
+              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
             </div>
           </div>
           <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="quant" onclick="selectAgent(this)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs">QA</div>
-              <div>
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">QA</div>
+              <div class="flex-1 min-w-0">
                 <p class="text-white text-sm font-medium">Quantitative Analyst</p>
                 <p class="text-white/40 text-xs">Backtests · Signal memos</p>
               </div>
-              <div class="ml-auto w-2 h-2 rounded-full bg-green-400"></div>
+              <button onclick="event.stopPropagation(); openPersonality('quant')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
+              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
             </div>
           </div>
-          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="relationship_manager" onclick="selectAgent(this)">
+          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="research" onclick="selectAgent(this)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs">RA</div>
-              <div>
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">RA</div>
+              <div class="flex-1 min-w-0">
                 <p class="text-white text-sm font-medium">Research Analyst</p>
                 <p class="text-white/40 text-xs">BPF reading · Thesis memos</p>
               </div>
-              <div class="ml-auto w-2 h-2 rounded-full bg-green-400"></div>
+              <button onclick="event.stopPropagation(); openPersonality('research')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
+              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
             </div>
           </div>
-          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="relationship_manager" onclick="selectAgent(this)">
+          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="portfolio_manager" onclick="selectAgent(this)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs">PM</div>
-              <div>
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">PM</div>
+              <div class="flex-1 min-w-0">
                 <p class="text-white text-sm font-medium">Portfolio Manager</p>
                 <p class="text-white/40 text-xs">Positions · Rebalancing</p>
               </div>
-              <div class="ml-auto w-2 h-2 rounded-full bg-green-400"></div>
+              <button onclick="event.stopPropagation(); openPersonality('portfolio_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
+              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
             </div>
           </div>
         </div>
@@ -437,11 +443,11 @@
     <!-- Footer -->
     <footer class="border-t border-white/5 pt-6 pb-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
       <div>
-        <p class="text-white/30 text-xs">Regulated crypto advisory infrastructure · Class F DABA + Class B IBA · Bermuda Monetary Authority</p>
-        <p class="text-white/20 text-xs mt-1">Intelligence powered by Blockchain Payment Flow Analysis · Maze2 SA · October 2025</p>
+        <p class="text-white/30 text-xs">Agentic portfolio intelligence for family offices, funds, and UHNWI clients</p>
+        <p class="text-white/20 text-xs mt-1">Intelligence powered by Blockchain Payment Flow Analysis · October 2025 snapshot · <a href="https://webthreepedia.com" target="_blank" class="text-white/30 hover:text-white/60 transition-colors underline">webthreepedia.com</a></p>
       </div>
       <div class="flex items-center gap-4">
-        <p class="text-white/20 text-xs">Not financial advice. All outputs reviewed by licensed principal before delivery.</p>
+        <p class="text-white/20 text-xs">Directional framework only. Not financial advice.</p>
         <div class="flex items-center gap-1.5">
           <div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
           <span class="text-green-400 text-xs">All agents online</span>
@@ -461,7 +467,75 @@
       cio: "Chief Investment Officer",
       risk_manager: "Risk Manager",
       quant: "Quantitative Analyst",
+      research: "Research Analyst",
+      portfolio_manager: "Portfolio Manager",
     };
+
+    const DEFAULT_MANDATES = {
+      relationship_manager: `You are the Relationship Manager — the only voice the client hears. Based on the internal team's work, produce a clear portfolio recommendation the client can understand and act on.
+
+Your output must follow this exact structure:
+
+**Recommended Portfolio**
+List each position as: COIN — X% — one sentence on why — one sentence on the main risk.
+Example: BTC — 60% — store of value anchor, most battle-tested asset in crypto — risk: down 49% from ATH, recovery timeline uncertain.
+
+**Why this allocation**
+2–3 sentences max. What thesis drives this? What market condition are we responding to?
+
+**Key risks to monitor**
+2–3 bullet points. Be specific — name the asset, name the risk condition that would trigger a review.
+
+No jargon. No hedging language. Confident, direct, actionable.`,
+
+      cio: `You are the Chief Investment Officer. Based on the client query, state in 150 words or less: (1) which profile fits this client, (2) the allocation targets in %, (3) which 1-2 thesis plays are active right now and why. Be direct — the portfolio manager will implement your call.`,
+
+      risk_manager: `You are the Risk Manager. In bullet points, state: which profile applies, whether the proposed allocation is within limits, and any single flag that would block execution. Max 100 words. Do not repeat what the CIO said — only flag blockers.`,
+
+      quant: `You are the Quantitative Analyst. In 100 words or less, give the key numbers that support or challenge the CIO's thesis: relevant returns, drawdowns, and one benchmark comparison. Numbers only — no opinions.`,
+
+      research: `You are the Research Analyst. For each asset the CIO mentioned, give one line: asset name, BPF profitability status, and the one fact from the October 2025 data most relevant to the current query. Max 150 words total.`,
+
+      portfolio_manager: `You are the Portfolio Manager. Translate the CIO's allocation targets into exact position sizes assuming a $1,000,000 portfolio. Show: asset, %, dollar amount, entry thesis in one line. Flag any position that conflicts with risk limits. Max 150 words.`,
+    };
+
+    let editingAgent = null;
+
+    function openPersonality(agentKey) {
+      editingAgent = agentKey;
+      document.getElementById("modal-agent-title").textContent = agentLabels[agentKey] || agentKey;
+      const saved = localStorage.getItem("advisory_mandate_" + agentKey);
+      document.getElementById("modal-mandate-input").value = saved ?? DEFAULT_MANDATES[agentKey] ?? "";
+      document.getElementById("personality-modal").classList.remove("hidden");
+    }
+
+    function closePersonalityModal(e) {
+      if (e && e.currentTarget !== e.target) return;
+      document.getElementById("personality-modal").classList.add("hidden");
+      editingAgent = null;
+    }
+
+    function savePersonality() {
+      if (!editingAgent) return;
+      const val = document.getElementById("modal-mandate-input").value.trim();
+      if (val && val !== DEFAULT_MANDATES[editingAgent]) {
+        localStorage.setItem("advisory_mandate_" + editingAgent, val);
+      } else {
+        localStorage.removeItem("advisory_mandate_" + editingAgent);
+      }
+      document.getElementById("personality-modal").classList.add("hidden");
+      editingAgent = null;
+    }
+
+    function resetPersonality() {
+      if (!editingAgent) return;
+      localStorage.removeItem("advisory_mandate_" + editingAgent);
+      document.getElementById("modal-mandate-input").value = DEFAULT_MANDATES[editingAgent] ?? "";
+    }
+
+    function getMandateOverride(agentKey) {
+      return localStorage.getItem("advisory_mandate_" + agentKey) || null;
+    }
 
     // Live prices from CoinGecko
     async function fetchPrices() {
@@ -565,7 +639,12 @@
         const res = await fetch(`${API_BASE}/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: msg, agent: currentAgent }),
+          body: JSON.stringify({
+            message: msg,
+            agent: currentAgent,
+            mandateOverride: getMandateOverride(currentAgent),
+            allowResearch: true,
+          }),
         });
         const data = await res.json();
         contentDiv.classList.remove("typing");
@@ -653,10 +732,15 @@
       document.getElementById("pipeline-status").textContent = "Consulting team…";
 
       try {
+        const mandateOverrides = {};
+        ["research","cio","risk_manager","quant","portfolio_manager","relationship_manager"].forEach(k => {
+          const v = getMandateOverride(k);
+          if (v) mandateOverrides[k] = v;
+        });
         const res = await fetch(`${API_BASE}/pipeline`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: msg }),
+          body: JSON.stringify({ message: msg, mandateOverrides }),
         });
 
         if (!res.ok) {
@@ -737,5 +821,27 @@
       sendBtn.disabled = false;
     }
   </script>
+  <!-- Personality Editor Modal -->
+  <div id="personality-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onclick="closePersonalityModal(event)">
+    <div class="bg-[#002f3b] border border-white/10 rounded-2xl w-full max-w-lg shadow-2xl" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between p-5 border-b border-white/10">
+        <div>
+          <p class="text-white font-semibold" id="modal-agent-title">Agent</p>
+          <p class="text-white/40 text-xs mt-0.5">Agent personality — defines how this agent thinks and responds</p>
+        </div>
+        <button onclick="document.getElementById('personality-modal').classList.add('hidden')" class="text-white/40 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center">×</button>
+      </div>
+      <div class="p-5">
+        <textarea id="modal-mandate-input" class="w-full bg-[#003f4e] border border-white/10 rounded-lg p-4 text-white/80 text-xs mono leading-relaxed resize-none focus:outline-none focus:border-[#e9dd35]/40 transition-colors" rows="14" placeholder="Agent mandate..."></textarea>
+      </div>
+      <div class="flex items-center justify-between px-5 pb-5">
+        <button onclick="resetPersonality()" class="text-white/30 text-xs hover:text-white/60 transition-colors">↩ Reset to default</button>
+        <div class="flex gap-3">
+          <button onclick="document.getElementById('personality-modal').classList.add('hidden')" class="px-4 py-2 text-sm text-white/50 hover:text-white transition-colors">Cancel</button>
+          <button onclick="savePersonality()" class="px-4 py-2 text-sm bg-[#e9dd35] text-[#002f3b] font-semibold rounded-lg hover:bg-[#e9dd35]/90 transition-colors">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
