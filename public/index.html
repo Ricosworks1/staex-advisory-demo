@@ -664,11 +664,15 @@
       }, 55000);
 
       try {
+        const abortCtrl = new AbortController();
+        const abortTimer = setTimeout(() => abortCtrl.abort(), 600_000); // 10 min max
         const res = await fetch(`${API_BASE}/pipeline`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: msg }),
+          signal: abortCtrl.signal,
         });
+        clearTimeout(abortTimer);
         clearInterval(stepTimer);
 
         if (!res.ok) {
