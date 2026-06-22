@@ -132,8 +132,22 @@
           <p class="text-white/40 text-xs uppercase tracking-wider mb-2">Portfolio Value</p>
           <p id="total-value" class="text-2xl font-bold text-white mono">—</p>
           <p id="total-pnl" class="text-sm mt-1">—</p>
-          <p class="text-white/30 text-xs mt-3">Starting: $1,000,000</p>
-          <p class="text-white/30 text-xs">Oct 1, 2025</p>
+          <p class="text-white/30 text-xs mt-1" id="fx-rate-label">Starting: $1,000,000 · Oct 1, 2025</p>
+          <!-- Currency selector -->
+          <div class="mt-3 pt-3 border-t border-white/5">
+            <div class="grid grid-cols-5 gap-1" id="currency-pills">
+              <button onclick="selectCurrency('USD')" class="currency-pill active text-[10px] mono py-1 rounded border border-[#e9dd35]/60 bg-[#e9dd35]/10 text-[#e9dd35] transition-all">USD</button>
+              <button onclick="selectCurrency('EUR')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">EUR</button>
+              <button onclick="selectCurrency('GBP')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">GBP</button>
+              <button onclick="selectCurrency('CHF')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">CHF</button>
+              <button onclick="selectCurrency('JPY')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">JPY</button>
+              <button onclick="selectCurrency('CAD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">CAD</button>
+              <button onclick="selectCurrency('AUD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">AUD</button>
+              <button onclick="selectCurrency('SGD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">SGD</button>
+              <button onclick="selectCurrency('HKD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">HKD</button>
+              <button onclick="selectCurrency('AED')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">AED</button>
+            </div>
+          </div>
         </div>
 
         <!-- BTC position -->
@@ -183,6 +197,16 @@
           </div>
           <div class="pt-2">
             <p id="btc-pnl" class="text-xs text-white/40">—</p>
+            <!-- BPF Economics — BPF June 2026 report -->
+            <div class="mt-2 pt-2 border-t border-white/5">
+              <p class="text-white/20 text-[9px] uppercase tracking-wider mb-1.5">BPF Economics · June 2026</p>
+              <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+                <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Fee revenue</p><p class="text-white/50 text-[10px] mono">$79.8M / yr</p></div>
+                <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Issuance</p><p class="text-white/50 text-[10px] mono">~$4.2B / yr</p></div>
+                <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Subsidy ratio</p><p class="text-orange-400/70 text-[10px] mono">53 : 1</p></div>
+                <div><p class="text-white/25 text-[9px] uppercase tracking-wider">BPF verdict</p><p class="text-white/50 text-[10px] mono">SoV, not revenue</p></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -236,6 +260,16 @@
           </div>
           <div class="pt-2">
             <p id="hype-pnl" class="text-xs text-white/40">—</p>
+            <!-- BPF Economics — BPF June 2026 report -->
+            <div class="mt-2 pt-2 border-t border-white/5">
+              <p class="text-white/20 text-[9px] uppercase tracking-wider mb-1.5">BPF Economics · June 2026</p>
+              <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+                <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Fee revenue</p><p class="text-green-400/70 text-[10px] mono">100% trading fees</p></div>
+                <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Issuance subsidy</p><p class="text-green-400/70 text-[10px] mono">$0 · none</p></div>
+                <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Revenue → buyback</p><p class="text-green-400/70 text-[10px] mono">97% daily</p></div>
+                <div><p class="text-white/25 text-[9px] uppercase tracking-wider">BPF verdict</p><p class="text-[#e9dd35]/70 text-[10px] mono">Genuine · ITM call</p></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -283,6 +317,16 @@
               <div><p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Beta /<small class="text-[9px]">BTC</small></p><p class="text-white/60 text-xs mono">0.00</p></div>
             </div>
             <p class="text-white/20 text-[9px] mono pb-2">Oct 1, 2025 → today · Aave lending · Capital preserved</p>
+          </div>
+          <!-- BPF Economics -->
+          <div class="mt-2 pt-2 border-t border-white/5">
+            <p class="text-white/20 text-[9px] uppercase tracking-wider mb-1.5">BPF Economics · June 2026</p>
+            <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+              <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Yield (Aave)</p><p class="text-green-400/70 text-[10px] mono">~6% APY</p></div>
+              <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Issuer</p><p class="text-white/50 text-[10px] mono">Circle (USDC)</p></div>
+              <div><p class="text-white/25 text-[9px] uppercase tracking-wider">Subsidy</p><p class="text-green-400/70 text-[10px] mono">$0 · none</p></div>
+              <div><p class="text-white/25 text-[9px] uppercase tracking-wider">BPF verdict</p><p class="text-white/50 text-[10px] mono">T-bill equivalent</p></div>
+            </div>
           </div>
         </div>
       </div>
@@ -777,6 +821,83 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     }
 
     // Live prices from CoinGecko
+    // ── Multi-currency support ───────────────────────────────────────────────
+    const CURRENCY_META = {
+      USD: { sym: '$',    name: 'US Dollar' },
+      EUR: { sym: '€',    name: 'Euro' },
+      GBP: { sym: '£',    name: 'Pound' },
+      CHF: { sym: 'Fr ',  name: 'Swiss Franc' },
+      JPY: { sym: '¥',    name: 'Yen' },
+      CAD: { sym: 'C$',   name: 'CAD' },
+      AUD: { sym: 'A$',   name: 'AUD' },
+      SGD: { sym: 'S$',   name: 'SGD' },
+      HKD: { sym: 'HK$',  name: 'HKD' },
+      AED: { sym: 'AED ', name: 'Dirham' },
+    };
+    let fxRates = {};
+    let currentPortfolioUSD = 0;
+    let selectedCurrCode = 'USD';
+
+    async function fetchFxRates() {
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await res.json();
+        fxRates = data.rates || {};
+        updateCurrencyDisplay();
+      } catch (e) { /* use 1:1 */ }
+    }
+
+    function fmtCurrency(usdVal, code) {
+      const rate = fxRates[code] || 1;
+      const val = usdVal * rate;
+      const sym = (CURRENCY_META[code] || CURRENCY_META.USD).sym;
+      const abs = Math.abs(val);
+      if (abs >= 1_000_000) return (val < 0 ? '-' : '') + sym + (abs / 1_000_000).toFixed(2) + 'M';
+      if (abs >= 1_000)     return (val < 0 ? '-' : '') + sym + Math.round(abs / 1000) + 'K';
+      return (val < 0 ? '-' : '') + sym + Math.round(abs);
+    }
+
+    function selectCurrency(code) {
+      selectedCurrCode = code;
+      document.querySelectorAll('.currency-pill').forEach(p => {
+        const isActive = p.textContent.trim() === code;
+        p.className = isActive
+          ? 'currency-pill text-[10px] mono py-1 rounded border border-[#e9dd35]/60 bg-[#e9dd35]/10 text-[#e9dd35] transition-all'
+          : 'currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all';
+      });
+      updateCurrencyDisplay();
+    }
+
+    function updateCurrencyDisplay() {
+      if (!currentPortfolioUSD) return;
+      const code = selectedCurrCode;
+      const rate = fxRates[code] || 1;
+      const val = currentPortfolioUSD * rate;
+      const startUSD = 1_000_000;
+      const start = startUSD * rate;
+      const pnl = val - start;
+      const pct = (pnl / start) * 100;
+
+      const sym = (CURRENCY_META[code] || CURRENCY_META.USD).sym;
+      const fmtBig = (v) => {
+        const abs = Math.abs(v);
+        const s = sym;
+        if (abs >= 1_000_000) return (v < 0 ? '-' : '') + s + (abs / 1_000_000).toFixed(2) + 'M';
+        return (v < 0 ? '-' : '') + s + Math.round(abs).toLocaleString();
+      };
+
+      document.getElementById('total-value').textContent = fmtBig(val);
+      document.getElementById('total-pnl').innerHTML =
+        `<span class="${pnl >= 0 ? 'price-up' : 'price-down'}">${pnl >= 0 ? '+' : ''}${fmtBig(pnl)} (${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%)</span>`;
+
+      const label = document.getElementById('fx-rate-label');
+      if (label) {
+        label.textContent = code === 'USD'
+          ? 'Starting: $1,000,000 · Oct 1, 2025'
+          : `1 USD = ${rate.toFixed(4)} ${code} · Start: ${sym}${Math.round(startUSD * rate).toLocaleString()}`;
+      }
+    }
+
     async function fetchPrices() {
       try {
         const r = await fetch(
@@ -807,8 +928,8 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         const totalPnl = totalVal - 1000000;
         const totalPct = (totalPnl / 1000000) * 100;
 
-        document.getElementById("total-value").textContent = "$" + Math.round(totalVal).toLocaleString();
-        document.getElementById("total-pnl").innerHTML = `<span class="${totalPnl >= 0 ? 'price-up' : 'price-down'}">${totalPnl >= 0 ? "+" : ""}$${Math.round(Math.abs(totalPnl)).toLocaleString()} (${totalPct >= 0 ? "+" : ""}${totalPct.toFixed(1)}%)</span>`;
+        currentPortfolioUSD = totalVal;
+        updateCurrencyDisplay();
         document.getElementById("perf-portfolio").textContent = "$" + Math.round(totalVal / 1000) + "K";
 
         const btcPnlPct = ((btc - btcEntry) / btcEntry * 100);
@@ -832,7 +953,9 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     }
 
     fetchPrices();
+    fetchFxRates();
     setInterval(fetchPrices, 60000);
+    setInterval(fetchFxRates, 3600000); // hourly FX refresh
     fetchQuantRatios();
 
     async function requestBPF() {
