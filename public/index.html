@@ -393,7 +393,13 @@
             <h3 class="text-white font-semibold text-sm">Team Deliberation</h3>
             <p class="text-white/40 text-xs mt-0.5">6-agent sequential analysis — <span id="pipeline-query-label" class="text-white/60"></span></p>
           </div>
-          <div id="pipeline-status" class="text-xs text-white/40 mono"></div>
+          <div class="flex items-center gap-3">
+            <div id="cache-badge" class="hidden items-center gap-1.5 bg-[#e9dd35]/10 border border-[#e9dd35]/20 rounded-md px-2.5 py-1">
+              <span class="text-[#e9dd35] text-[10px]">⚡</span>
+              <span class="text-[#e9dd35] text-[10px] mono" id="cache-badge-label">Pre-computed · 7AM CET</span>
+            </div>
+            <div id="pipeline-status" class="text-xs text-white/40 mono"></div>
+          </div>
         </div>
 
         <!-- Agent progress track -->
@@ -548,6 +554,7 @@
     // Config — change this URL when hosting on your own infrastructure
     const API_BASE = "https://www.staex.io/api/advisory";
     let lastPipelineSynthesis = null; // stored after Team Analysis to give single-agent chats context
+    let lastResultFromCache = false;  // true when last Team Analysis was served from daily pre-computation
 
     let currentAgent = "relationship_manager";
     const agentLabels = {
@@ -816,6 +823,10 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       const msg = input.value.trim();
       if (!msg) { input.focus(); return; }
 
+      // Second click when last result was from cache → run fresh
+      const forceRefresh = lastResultFromCache;
+      lastResultFromCache = false;
+
       const pipelineBtn = document.getElementById("pipeline-btn");
       const sendBtn = document.getElementById("send-btn");
       pipelineBtn.disabled = true;
@@ -835,10 +846,12 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       document.getElementById("deliberation-body").classList.remove("open");
       document.getElementById("deliberation-arrow").textContent = "▶";
       document.getElementById("deliberation-toggle-label").textContent = "Show team deliberation (5 internal memos)";
+      document.getElementById("cache-badge").classList.add("hidden");
+      document.getElementById("cache-badge").classList.remove("flex");
 
       const shortMsg = msg.length > 48 ? msg.slice(0, 48) + "…" : msg;
       document.getElementById("pipeline-query-label").textContent = `"${shortMsg}"`;
-      document.getElementById("pipeline-status").textContent = "Consulting team…";
+      document.getElementById("pipeline-status").textContent = forceRefresh ? "Running live analysis…" : "Consulting team…";
 
       try {
         const mandateOverrides = {};
@@ -849,7 +862,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         const res = await fetch(`${API_BASE}/pipeline`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: msg, mandateOverrides }),
+          body: JSON.stringify({ message: msg, mandateOverrides, force_refresh: forceRefresh }),
         });
 
         if (!res.ok) {
@@ -864,23 +877,30 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         const decoder = new TextDecoder();
         let buf = "";
         let finalData = null;
+        let servedFromCache = false;
 
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
           buf += decoder.decode(value, { stream: true });
           const lines = buf.split("\n");
-          buf = lines.pop(); // keep incomplete trailing line
+          buf = lines.pop();
           for (const line of lines) {
             if (!line.startsWith("data: ")) continue;
             let ev;
             try { ev = JSON.parse(line.slice(6)); } catch { continue; }
-            if (ev.type === "agent_start") {
+            if (ev.type === "profile_inferred") {
+              document.getElementById("pipeline-status").textContent = `Profile ${ev.profile} · ${servedFromCache ? "from cache" : "consulting team…"}`;
+            } else if (ev.type === "cache_hit") {
+              servedFromCache = true;
+              document.getElementById("pipeline-status").textContent = `Profile ${ev.profile} · loading from pre-computation…`;
+            } else if (ev.type === "agent_start") {
               setPipelineStep(ev.agent, "running");
             } else if (ev.type === "agent_done") {
               setPipelineStep(ev.agent, "done");
             } else if (ev.type === "done") {
               finalData = ev;
+              servedFromCache = !!ev._cached;
             } else if (ev.type === "error") {
               document.getElementById("pipeline-status").textContent = "Error — try again";
             }
@@ -896,6 +916,16 @@ No jargon. No hedging language. Confident, direct, actionable.`,
 
         // Mark all steps done
         PIPELINE_STEPS.forEach(s => setPipelineStep(s, "done"));
+
+        // Show cache badge if result was pre-computed
+        if (finalData._cached) {
+          lastResultFromCache = true;
+          const badge = document.getElementById("cache-badge");
+          const ts = finalData.cachedAt ? new Date(finalData.cachedAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Zurich" }) : "";
+          document.getElementById("cache-badge-label").textContent = `⚡ Pre-computed · ${ts} CET · click again to run live`;
+          badge.classList.remove("hidden");
+          badge.classList.add("flex");
+        }
 
         // Show synthesis in pipeline panel
         document.getElementById("synthesis-text").textContent = finalData.synthesis;
@@ -923,7 +953,10 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         });
 
         document.getElementById("deliberation-toggle").classList.remove("hidden");
-        document.getElementById("pipeline-status").textContent = `Done · ${finalData._debug?.agents ?? 6} agents`;
+        const agentCount = finalData._debug?.agents ?? 6;
+        document.getElementById("pipeline-status").textContent = finalData._cached
+          ? `Profile ${finalData._debug?.profile} · pre-computed · ${agentCount} agents`
+          : `Done · ${agentCount} agents`;
 
       } catch (e) {
         document.getElementById("pipeline-status").textContent = "Connection error";
