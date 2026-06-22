@@ -19,6 +19,12 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
     .chat-msg { animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .pipeline-step { transition: opacity 0.3s; }
+    .pipeline-step.pending { opacity: 0.35; }
+    .pipeline-step.running { opacity: 1; }
+    .pipeline-step.done { opacity: 1; }
+    .deliberation-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .deliberation-body.open { max-height: 4000px; }
   </style>
 </head>
 <body class="bg-[#002f3b] text-white min-h-screen">
@@ -282,17 +288,87 @@
         </div>
 
         <!-- Input -->
-        <div class="mt-3 flex gap-3">
+        <div class="mt-3 flex gap-2">
           <input id="chat-input" type="text" placeholder="Ask the agent team anything…"
             class="flex-1 bg-[#003f4e] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#e9dd35]/40"
             onkeydown="if(event.key==='Enter')sendMessage()" />
           <button onclick="sendMessage()" id="send-btn"
-            class="bg-[#e9dd35] hover:bg-[#c4b920] text-[#002f3b] font-semibold px-5 py-3 rounded-xl text-sm transition-colors disabled:opacity-50">
+            class="bg-[#e9dd35] hover:bg-[#c4b920] text-[#002f3b] font-semibold px-4 py-3 rounded-xl text-sm transition-colors disabled:opacity-50">
             Send
+          </button>
+          <button onclick="runPipeline()" id="pipeline-btn" title="Run full 6-agent team analysis"
+            class="bg-[#003f4e] hover:bg-[#004d60] border border-[#e9dd35]/30 hover:border-[#e9dd35]/60 text-[#e9dd35] font-medium px-4 py-3 rounded-xl text-xs transition-colors disabled:opacity-50 whitespace-nowrap">
+            Team Analysis
           </button>
         </div>
       </div>
     </div>
+
+    <!-- Pipeline results panel (shown after Team Analysis) -->
+    <section id="pipeline-panel" class="hidden">
+      <div class="bg-[#003f4e] rounded-xl border border-[#e9dd35]/20 overflow-hidden">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-white/5">
+          <div>
+            <h3 class="text-white font-semibold text-sm">Team Deliberation</h3>
+            <p class="text-white/40 text-xs mt-0.5">6-agent sequential analysis — <span id="pipeline-query-label" class="text-white/60"></span></p>
+          </div>
+          <div id="pipeline-status" class="text-xs text-white/40 mono"></div>
+        </div>
+
+        <!-- Agent progress track -->
+        <div class="px-6 py-4 border-b border-white/5">
+          <div class="flex items-center gap-1" id="pipeline-track">
+            <div class="pipeline-step pending flex-1 text-center" data-step="research">
+              <div class="text-[10px] text-white/40 mb-1">Research</div>
+              <div class="h-1 rounded-full bg-white/10" id="bar-research"></div>
+            </div>
+            <div class="w-4 text-white/20 text-center text-xs">→</div>
+            <div class="pipeline-step pending flex-1 text-center" data-step="cio">
+              <div class="text-[10px] text-white/40 mb-1">CIO</div>
+              <div class="h-1 rounded-full bg-white/10" id="bar-cio"></div>
+            </div>
+            <div class="w-4 text-white/20 text-center text-xs">→</div>
+            <div class="pipeline-step pending flex-1 text-center" data-step="risk_manager">
+              <div class="text-[10px] text-white/40 mb-1">Risk</div>
+              <div class="h-1 rounded-full bg-white/10" id="bar-risk_manager"></div>
+            </div>
+            <div class="w-4 text-white/20 text-center text-xs">→</div>
+            <div class="pipeline-step pending flex-1 text-center" data-step="quant">
+              <div class="text-[10px] text-white/40 mb-1">Quant</div>
+              <div class="h-1 rounded-full bg-white/10" id="bar-quant"></div>
+            </div>
+            <div class="w-4 text-white/20 text-center text-xs">→</div>
+            <div class="pipeline-step pending flex-1 text-center" data-step="portfolio_manager">
+              <div class="text-[10px] text-white/40 mb-1">PM</div>
+              <div class="h-1 rounded-full bg-white/10" id="bar-portfolio_manager"></div>
+            </div>
+            <div class="w-4 text-white/20 text-center text-xs">→</div>
+            <div class="pipeline-step pending flex-1 text-center" data-step="relationship_manager">
+              <div class="text-[10px] text-white/40 mb-1">RM</div>
+              <div class="h-1 rounded-full bg-white/10" id="bar-relationship_manager"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RM synthesis (prominent) -->
+        <div id="synthesis-box" class="hidden px-6 py-5 border-b border-white/5">
+          <p class="text-[#e9dd35] text-xs uppercase tracking-wider mb-3">Client Recommendation — Relationship Manager</p>
+          <div id="synthesis-text" class="text-white/85 text-sm leading-relaxed whitespace-pre-wrap"></div>
+        </div>
+
+        <!-- Team deliberation toggle -->
+        <div id="deliberation-toggle" class="hidden">
+          <button onclick="toggleDeliberation()" class="w-full px-6 py-3 text-left text-xs text-white/40 hover:text-white/60 flex items-center gap-2 transition-colors">
+            <span id="deliberation-arrow">▶</span>
+            <span id="deliberation-toggle-label">Show team deliberation (5 internal memos)</span>
+          </button>
+          <div class="deliberation-body" id="deliberation-body">
+            <div id="deliberation-content" class="px-6 pb-5 space-y-4"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- 10 Profiles -->
     <section>
@@ -503,6 +579,140 @@
     function sendSuggestion(btn) {
       document.getElementById("chat-input").value = btn.textContent;
       sendMessage();
+    }
+
+    // ── Pipeline (Full Team Analysis) ─────────────────────────────────────────
+
+    const PIPELINE_STEPS = ["research","cio","risk_manager","quant","portfolio_manager","relationship_manager"];
+    const PIPELINE_LABELS = {
+      research: "Research Analyst",
+      cio: "Chief Investment Officer",
+      risk_manager: "Risk Manager",
+      quant: "Quantitative Analyst",
+      portfolio_manager: "Portfolio Manager",
+      relationship_manager: "Relationship Manager",
+    };
+
+    function setPipelineStep(step, state) {
+      const el = document.querySelector(`[data-step="${step}"]`);
+      const bar = document.getElementById(`bar-${step}`);
+      if (!el || !bar) return;
+      el.classList.remove("pending","running","done");
+      el.classList.add(state);
+      if (state === "running") {
+        bar.className = "h-1 rounded-full bg-[#e9dd35]/40 animate-pulse";
+        el.querySelector("div").className = "text-[10px] text-[#e9dd35] mb-1";
+      } else if (state === "done") {
+        bar.className = "h-1 rounded-full bg-[#e9dd35]";
+        el.querySelector("div").className = "text-[10px] text-[#e9dd35]/60 mb-1";
+      }
+    }
+
+    function toggleDeliberation() {
+      const body = document.getElementById("deliberation-body");
+      const arrow = document.getElementById("deliberation-arrow");
+      const label = document.getElementById("deliberation-toggle-label");
+      const isOpen = body.classList.contains("open");
+      body.classList.toggle("open", !isOpen);
+      arrow.textContent = isOpen ? "▶" : "▼";
+      label.textContent = isOpen
+        ? "Show team deliberation (5 internal memos)"
+        : "Hide team deliberation";
+    }
+
+    async function runPipeline() {
+      const input = document.getElementById("chat-input");
+      const msg = input.value.trim();
+      if (!msg) { input.focus(); return; }
+
+      const pipelineBtn = document.getElementById("pipeline-btn");
+      const sendBtn = document.getElementById("send-btn");
+      pipelineBtn.disabled = true;
+      sendBtn.disabled = true;
+      input.value = "";
+
+      // Show the pipeline panel
+      const panel = document.getElementById("pipeline-panel");
+      panel.classList.remove("hidden");
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // Reset state
+      PIPELINE_STEPS.forEach(s => setPipelineStep(s, "pending"));
+      document.getElementById("synthesis-box").classList.add("hidden");
+      document.getElementById("deliberation-toggle").classList.add("hidden");
+      document.getElementById("deliberation-content").innerHTML = "";
+      document.getElementById("deliberation-body").classList.remove("open");
+      document.getElementById("deliberation-arrow").textContent = "▶";
+      document.getElementById("deliberation-toggle-label").textContent = "Show team deliberation (5 internal memos)";
+
+      const shortMsg = msg.length > 48 ? msg.slice(0, 48) + "…" : msg;
+      document.getElementById("pipeline-query-label").textContent = `"${shortMsg}"`;
+      document.getElementById("pipeline-status").textContent = "Consulting team…";
+
+      // Animate steps as if they're running (we don't have streaming, so fake it)
+      let stepIdx = 0;
+      const stepTimer = setInterval(() => {
+        if (stepIdx > 0) setPipelineStep(PIPELINE_STEPS[stepIdx - 1], "running");
+        stepIdx++;
+        if (stepIdx >= PIPELINE_STEPS.length) clearInterval(stepTimer);
+      }, 4000);
+
+      try {
+        const res = await fetch(`${API_BASE}/pipeline`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg }),
+        });
+        clearInterval(stepTimer);
+
+        if (!res.ok) {
+          document.getElementById("pipeline-status").textContent = "Error — try again";
+          pipelineBtn.disabled = false;
+          sendBtn.disabled = false;
+          return;
+        }
+
+        const data = await res.json();
+
+        // Mark all steps done
+        PIPELINE_STEPS.forEach(s => setPipelineStep(s, "done"));
+
+        // Show synthesis
+        document.getElementById("synthesis-text").textContent = data.synthesis;
+        document.getElementById("synthesis-box").classList.remove("hidden");
+
+        // Build internal deliberation
+        const internals = data.pipeline.slice(0, -1); // exclude RM (that's the synthesis)
+        const content = document.getElementById("deliberation-content");
+        internals.forEach(step => {
+          const div = document.createElement("div");
+          div.className = "border border-white/5 rounded-lg overflow-hidden";
+          div.innerHTML = `
+            <div class="px-4 py-2 bg-white/3 border-b border-white/5 flex items-center justify-between">
+              <span class="text-white/60 text-xs font-medium">${PIPELINE_LABELS[step.agent] || step.agent}</span>
+              <span class="text-white/20 text-xs mono">${step._tokens?.in ?? 0}→${step._tokens?.out ?? 0} tokens · ${step._tokens?.cacheRead ?? 0} cached</span>
+            </div>
+            <div class="px-4 py-3 text-white/70 text-xs leading-relaxed whitespace-pre-wrap">${step.output}</div>`;
+          content.appendChild(div);
+        });
+
+        document.getElementById("deliberation-toggle").classList.remove("hidden");
+
+        const totalIn = data._debug?.totalTokensIn ?? 0;
+        const totalCached = data._debug?.totalCacheRead ?? 0;
+        document.getElementById("pipeline-status").textContent =
+          `Done · ${totalIn} tokens in · ${totalCached} cached`;
+
+        // Also append RM message to the main chat
+        appendMessage("agent", data.synthesis, "relationship_manager");
+
+      } catch (e) {
+        clearInterval(stepTimer);
+        document.getElementById("pipeline-status").textContent = "Connection error";
+      }
+
+      pipelineBtn.disabled = false;
+      sendBtn.disabled = false;
     }
   </script>
 </body>
