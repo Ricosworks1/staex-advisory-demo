@@ -652,13 +652,16 @@
       document.getElementById("pipeline-query-label").textContent = `"${shortMsg}"`;
       document.getElementById("pipeline-status").textContent = "Consulting team…";
 
-      // Animate steps as if they're running (we don't have streaming, so fake it)
+      // Advance one step every ~55s to match real Opus agent timing.
+      // Mark current step "running", previous step "done" so progress is visible.
       let stepIdx = 0;
+      setPipelineStep(PIPELINE_STEPS[0], "running");
       const stepTimer = setInterval(() => {
-        if (stepIdx > 0) setPipelineStep(PIPELINE_STEPS[stepIdx - 1], "running");
+        if (stepIdx < PIPELINE_STEPS.length) setPipelineStep(PIPELINE_STEPS[stepIdx], "done");
         stepIdx++;
+        if (stepIdx < PIPELINE_STEPS.length) setPipelineStep(PIPELINE_STEPS[stepIdx], "running");
         if (stepIdx >= PIPELINE_STEPS.length) clearInterval(stepTimer);
-      }, 4000);
+      }, 55000);
 
       try {
         const res = await fetch(`${API_BASE}/pipeline`, {
