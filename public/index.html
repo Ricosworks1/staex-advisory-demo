@@ -32,6 +32,77 @@
 </head>
 <body class="bg-[#002f3b] text-white min-h-screen">
 
+  <!-- Methodology Modal -->
+  <div id="methodology-modal" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-[#002f3b] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[88vh] flex flex-col shadow-2xl">
+      <!-- Header -->
+      <div class="flex items-start justify-between p-7 pb-5 border-b border-white/8 flex-shrink-0">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-7 h-7 rounded-lg bg-[#e9dd35] flex items-center justify-center text-[#002f3b] font-bold text-xs">S</div>
+            <span class="text-white/40 text-xs uppercase tracking-widest mono">Staex Advisory</span>
+          </div>
+          <h2 class="text-white text-xl font-semibold leading-tight">Investment Methodology</h2>
+          <p class="text-white/40 text-xs mt-1">The analytical framework underlying every recommendation this system produces</p>
+        </div>
+      </div>
+      <!-- Scrollable body -->
+      <div class="overflow-y-auto px-7 py-6 space-y-7 scrollbar-hide flex-1 text-sm leading-relaxed">
+
+        <div>
+          <p class="text-[#e9dd35] text-[10px] uppercase tracking-widest mb-3 mono">I — The Option-Theoretic Framework</p>
+          <p class="text-white/80">Crypto assets are best understood as path-dependent options on underlying adoption theses, not as equity instruments. A token's market price at any point in time represents the market's risk-neutral probability that the underlying protocol achieves the adoption density required to sustain terminal value. The "strike" in this analogy is the adoption threshold — the minimum network-effect mass needed to achieve and hold category dominance.</p>
+          <p class="text-white/60 mt-3">This framing maps directly to option Greeks. <span class="text-white/80">Delta</span> is thesis conviction — sensitivity of position value to changes in adoption probability. <span class="text-white/80">Gamma</span> is upside optionality — how rapidly delta accelerates as the thesis plays out. <span class="text-white/80">Theta</span> is subsidy burn — the rate at which a protocol's runway decays absent organic fee revenue. <span class="text-white/80">Implied volatility</span> maps to narrative momentum and institutional flow intensity. Most tokens are deeply out-of-the-money options: low probability of hitting the strike, but enormous payoff if they do. Most will expire worthless. That is the correct market outcome in a winner-takes-all structure — not a failure, but arithmetic.</p>
+        </div>
+
+        <div>
+          <p class="text-[#e9dd35] text-[10px] uppercase tracking-widest mb-3 mono">II — Winner-Takes-All Market Structure</p>
+          <p class="text-white/80">Network effects in financial infrastructure follow a power-law value distribution with an exponent substantially greater than 1. Within any defined protocol category — decentralised perpetual futures, L1 smart contract platforms, store-of-value instruments — liquidity compounds into dominance. The leading protocol's depth advantage is self-reinforcing: tighter spreads attract volume, volume deepens liquidity, deeper liquidity attracts institutional flow.</p>
+          <p class="text-white/60 mt-3">The portfolio implication is categorical: five positions across a single category is not diversification — it is diluted conviction spread across the wrong direction of the distribution. The advisory mandate is to identify which protocol will capture category-level value, size with conviction, and hold through thesis-consistent drawdowns. Diversification across categories is rational; diversification within a category destroys expected value.</p>
+        </div>
+
+        <div>
+          <p class="text-[#e9dd35] text-[10px] uppercase tracking-widest mb-3 mono">III — The Blockchain Payment Flow Signal</p>
+          <p class="text-white/80">Traditional on-chain analytics are price-correlated, backward-looking proxies. The Blockchain Payment Flow (BPF) framework provides a fundamentals-first filter: protocol-level fee revenue measured against inflation-driven subsidy expenditure. The BPF analysis computed over a $4.3T total market universe (October 2025, Maze2 SA) found that 85–90% of tracked protocols operate at subsidy-dependency ratios exceeding 1.0 — meaning they exist because of token inflation, not because of economic value creation.</p>
+          <p class="text-white/60 mt-3">This is not a market anomaly. It is the correct equilibrium of a winner-takes-all system in which most options must expire worthless. The signal value of the BPF lies in identifying the exceptions: protocols generating fee revenue that exceeds subsidy expenditure on a standalone basis. At the time of analysis, one protocol met this standard unambiguously — Hyperliquid (HYPE), with $13 billion in annualised fee revenue, a 97% fee-to-buyback mechanism, and 70% market share in decentralised perpetual futures.</p>
+        </div>
+
+        <div>
+          <p class="text-[#e9dd35] text-[10px] uppercase tracking-widest mb-3 mono">IV — The Four-Test Filter</p>
+          <p class="text-white/60">Each asset considered for thesis allocation is evaluated against four necessary conditions:</p>
+          <div class="mt-3 space-y-2">
+            <div class="flex gap-3"><span class="text-[#e9dd35] mono text-xs w-20 flex-shrink-0 pt-0.5">Revenue</span><span class="text-white/70 text-xs">Does the protocol generate fee income exceeding its inflation expenditure on a standalone basis?</span></div>
+            <div class="flex gap-3"><span class="text-[#e9dd35] mono text-xs w-20 flex-shrink-0 pt-0.5">Position</span><span class="text-white/70 text-xs">Does it hold, or is it accruing, dominant market share within its category?</span></div>
+            <div class="flex gap-3"><span class="text-[#e9dd35] mono text-xs w-20 flex-shrink-0 pt-0.5">Tokenomics</span><span class="text-white/70 text-xs">Is value accrual to token holders structurally enforced — buyback, fee burn, or staking yield from real revenue rather than inflation?</span></div>
+            <div class="flex gap-3"><span class="text-[#e9dd35] mono text-xs w-20 flex-shrink-0 pt-0.5">Catalyst</span><span class="text-white/70 text-xs">Is there an identifiable near-term institutional or regulatory event capable of accelerating adoption at scale?</span></div>
+          </div>
+          <p class="text-white/40 text-xs mt-3">All four must be satisfied. A protocol with dominant position but inflationary tokenomics does not qualify. A protocol with excellent tokenomics but no identifiable catalyst is a candidate, not a thesis.</p>
+        </div>
+
+        <div>
+          <p class="text-[#e9dd35] text-[10px] uppercase tracking-widest mb-3 mono">V — The 10-Profile Allocation Framework</p>
+          <p class="text-white/80">Client mandates are mapped to one of ten profiles, each representing a distinct construction on the option-book spectrum. Profiles 1–3 maximise gamma: no Bitcoin anchor, no stablecoin floor, full exposure to thesis plays and speculative alternatives. Profiles 7–10 maximise capital preservation: deep in-the-money Bitcoin anchors, stablecoin yield floors, minimal directional risk. Profile 5 (Balanced) is the covered-call structure — a large Bitcoin anchor providing intrinsic value, a single high-conviction thesis play providing optionality, and a stablecoin yield floor as premium income.</p>
+          <p class="text-white/60 mt-3">Bitcoin occupies a structurally distinct role: it is the deep ITM option — high intrinsic value, low extrinsic premium, low gamma. It will not deliver 10x returns from current levels. It is the portfolio anchor for profiles where capital preservation is part of the mandate, and absent from profiles built to capture asymmetric upside.</p>
+        </div>
+
+        <div>
+          <p class="text-[#e9dd35] text-[10px] uppercase tracking-widest mb-3 mono">VI — Scope and Limitations</p>
+          <p class="text-white/60">This system produces a <span class="text-white/80">directional framework</span>, not price predictions. The view expressed is grounded in the October 2025 BPF snapshot and is stable until one of three triggers occurs: a new BPF analysis run, a material change in a protocol's revenue profile or market position, or a client-directed profile change. It does not account for individual tax jurisdiction, estate planning requirements, or liquidity constraints. It is not regulated financial advice.</p>
+          <p class="text-white/40 text-xs mt-3 italic">The value of this framework is not in predicting when the next tsunami arrives. It is in identifying where tectonic pressure is building — and being positioned before it does.</p>
+        </div>
+
+      </div>
+      <!-- Footer button -->
+      <div class="px-7 py-5 border-t border-white/8 flex items-center justify-between flex-shrink-0">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="dont-show-again" class="w-3.5 h-3.5 accent-[#e9dd35]">
+          <span class="text-white/30 text-xs">Don't show again</span>
+        </label>
+        <button onclick="closeMethodologyModal()" class="px-6 py-2.5 bg-[#e9dd35] text-[#002f3b] font-semibold text-sm rounded-lg hover:bg-[#e9dd35]/90 transition-colors">Enter the system →</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Header -->
   <header class="border-b border-white/10 px-6 py-4">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
@@ -458,8 +529,20 @@
   </main>
 
   <script>
+    // Methodology modal
+    function closeMethodologyModal() {
+      if (document.getElementById("dont-show-again").checked) {
+        localStorage.setItem("advisory_methodology_seen", "1");
+      }
+      document.getElementById("methodology-modal").classList.add("hidden");
+    }
+    if (localStorage.getItem("advisory_methodology_seen")) {
+      document.getElementById("methodology-modal").classList.add("hidden");
+    }
+
     // Config — change this URL when hosting on your own infrastructure
     const API_BASE = "https://www.staex.io/api/advisory";
+    let lastPipelineSynthesis = null; // stored after Team Analysis to give single-agent chats context
 
     let currentAgent = "relationship_manager";
     const agentLabels = {
@@ -640,7 +723,9 @@ No jargon. No hedging language. Confident, direct, actionable.`,
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            message: msg,
+            message: lastPipelineSynthesis
+              ? `[CONTEXT — most recent Team Analysis output from the Relationship Manager]:\n${lastPipelineSynthesis}\n\n[CLIENT QUESTION]:\n${msg}`
+              : msg,
             agent: currentAgent,
             mandateOverride: getMandateOverride(currentAgent),
             allowResearch: true,
@@ -791,6 +876,9 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         // Show synthesis in pipeline panel
         document.getElementById("synthesis-text").textContent = finalData.synthesis;
         document.getElementById("synthesis-box").classList.remove("hidden");
+
+        // Store synthesis so follow-up single-agent chats have context
+        lastPipelineSynthesis = finalData.synthesis;
 
         // Post RM answer into the main chat
         appendMessage("assistant", finalData.synthesis, "relationship_manager");
