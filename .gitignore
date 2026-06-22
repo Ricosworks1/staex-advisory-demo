@@ -1,0 +1,12 @@
+# Client data — never commit
+reports/client/private/
+*.credentials
+.env*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
