@@ -236,15 +236,15 @@
         <h3 class="text-white font-semibold mb-1">Agent Team</h3>
         <p class="text-white/40 text-xs mb-4">Click an agent to query them directly</p>
         <div class="space-y-2">
-          <div class="agent-card active cursor-pointer p-4 rounded-xl border border-[#e9dd35] bg-[#003f4e]/80" data-agent="relationship_manager" onclick="selectAgent(this)">
+          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="research" onclick="selectAgent(this)">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[#e9dd35]/10 flex items-center justify-center text-[#e9dd35] text-sm flex-shrink-0">RM</div>
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">RA</div>
               <div class="flex-1 min-w-0">
-                <p class="text-white text-sm font-medium">Relationship Manager</p>
-                <p class="text-white/40 text-xs">Client advisory · Daily briefings</p>
+                <p class="text-white text-sm font-medium">Research Analyst</p>
+                <p class="text-white/40 text-xs">BPF reading · Thesis memos</p>
               </div>
-              <button onclick="event.stopPropagation(); openPersonality('relationship_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
-              <div class="w-2 h-2 rounded-full bg-[#e9dd35] flex-shrink-0"></div>
+              <button onclick="event.stopPropagation(); openPersonality('research')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
+              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
             </div>
           </div>
           <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="cio" onclick="selectAgent(this)">
@@ -280,17 +280,6 @@
               <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
             </div>
           </div>
-          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="research" onclick="selectAgent(this)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">RA</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-white text-sm font-medium">Research Analyst</p>
-                <p class="text-white/40 text-xs">BPF reading · Thesis memos</p>
-              </div>
-              <button onclick="event.stopPropagation(); openPersonality('research')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
-              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
-            </div>
-          </div>
           <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="portfolio_manager" onclick="selectAgent(this)">
             <div class="flex items-center gap-3">
               <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">PM</div>
@@ -300,6 +289,17 @@
               </div>
               <button onclick="event.stopPropagation(); openPersonality('portfolio_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
               <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
+            </div>
+          </div>
+          <div class="agent-card active cursor-pointer p-4 rounded-xl border border-[#e9dd35] bg-[#003f4e]/80" data-agent="relationship_manager" onclick="selectAgent(this)">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-[#e9dd35]/10 flex items-center justify-center text-[#e9dd35] text-sm flex-shrink-0">RM</div>
+              <div class="flex-1 min-w-0">
+                <p class="text-white text-sm font-medium">Relationship Manager</p>
+                <p class="text-white/40 text-xs">Client advisory · Daily briefings</p>
+              </div>
+              <button onclick="event.stopPropagation(); openPersonality('relationship_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
+              <div class="w-2 h-2 rounded-full bg-[#e9dd35] flex-shrink-0"></div>
             </div>
           </div>
         </div>
