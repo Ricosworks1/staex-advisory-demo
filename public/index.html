@@ -104,22 +104,10 @@
   </div>
 
   <!-- Header -->
-  <header class="border-b border-white/10 px-6 py-4">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="w-8 h-8 rounded-lg bg-[#e9dd35] flex items-center justify-center text-[#002f3b] font-bold text-sm">S</div>
-        <div>
-          <p class="text-white font-semibold text-sm">Staex Advisory</p>
-          <p class="text-white/40 text-xs">Powered by Blockchain Payment Flow Intelligence</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <div class="text-right">
-          <p class="text-white/50 text-xs">Demo Client</p>
-          <p class="text-white text-sm font-medium">Family Office · Profile 5</p>
-        </div>
-        <div class="w-8 h-8 rounded-full bg-[#003f4e] border border-white/10 flex items-center justify-center text-xs text-white/60">FO</div>
-      </div>
+  <header class="border-b border-white/10 px-6 py-5">
+    <div class="max-w-7xl mx-auto flex items-center gap-5">
+      <div class="w-10 h-10 rounded-xl bg-[#e9dd35] flex items-center justify-center text-[#002f3b] font-black text-base flex-shrink-0">S</div>
+      <h1 class="text-[#e9dd35] text-3xl font-black uppercase tracking-tight leading-none">AI Advisory Agentic Suite Demo</h1>
     </div>
   </header>
 
@@ -890,10 +878,10 @@ No jargon. No hedging language. Confident, direct, actionable.`,
             let ev;
             try { ev = JSON.parse(line.slice(6)); } catch { continue; }
             if (ev.type === "profile_inferred") {
-              document.getElementById("pipeline-status").textContent = `Profile ${ev.profile} · ${servedFromCache ? "from cache" : "consulting team…"}`;
+              // profile stored silently, no UI update needed
             } else if (ev.type === "cache_hit") {
               servedFromCache = true;
-              document.getElementById("pipeline-status").textContent = `Profile ${ev.profile} · loading from pre-computation…`;
+              document.getElementById("pipeline-status").textContent = "Loading from pre-computation…";
             } else if (ev.type === "agent_start") {
               setPipelineStep(ev.agent, "running");
             } else if (ev.type === "agent_done") {
@@ -955,7 +943,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         document.getElementById("deliberation-toggle").classList.remove("hidden");
         const agentCount = finalData._debug?.agents ?? 6;
         document.getElementById("pipeline-status").textContent = finalData._cached
-          ? `Profile ${finalData._debug?.profile} · pre-computed · ${agentCount} agents`
+          ? `Pre-computed · ${agentCount} agents`
           : `Done · ${agentCount} agents`;
 
       } catch (e) {
