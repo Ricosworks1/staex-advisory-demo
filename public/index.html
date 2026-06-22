@@ -23,6 +23,9 @@
     .pipeline-step.pending { opacity: 0.35; }
     .pipeline-step.running { opacity: 1; }
     .pipeline-step.done { opacity: 1; }
+    .pipeline-step.running .step-bar { animation: pulse-bar 1.2s ease-in-out infinite; background: #e9dd35; }
+    @keyframes pulse-bar { 0%,100%{opacity:0.4} 50%{opacity:1} }
+    .pipeline-step.running .step-label { color: #e9dd35; }
     .deliberation-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
     .deliberation-body.open { max-height: 4000px; }
   </style>
@@ -320,33 +323,33 @@
         <div class="px-6 py-4 border-b border-white/5">
           <div class="flex items-center gap-1" id="pipeline-track">
             <div class="pipeline-step pending flex-1 text-center" data-step="research">
-              <div class="text-[10px] text-white/40 mb-1">Research</div>
-              <div class="h-1 rounded-full bg-white/10" id="bar-research"></div>
+              <div class="step-label text-[10px] text-white/40 mb-1">Research</div>
+              <div class="step-bar h-1 rounded-full bg-white/10" id="bar-research"></div>
             </div>
             <div class="w-4 text-white/20 text-center text-xs">→</div>
             <div class="pipeline-step pending flex-1 text-center" data-step="cio">
-              <div class="text-[10px] text-white/40 mb-1">CIO</div>
-              <div class="h-1 rounded-full bg-white/10" id="bar-cio"></div>
+              <div class="step-label text-[10px] text-white/40 mb-1">CIO</div>
+              <div class="step-bar h-1 rounded-full bg-white/10" id="bar-cio"></div>
             </div>
             <div class="w-4 text-white/20 text-center text-xs">→</div>
             <div class="pipeline-step pending flex-1 text-center" data-step="risk_manager">
-              <div class="text-[10px] text-white/40 mb-1">Risk</div>
-              <div class="h-1 rounded-full bg-white/10" id="bar-risk_manager"></div>
+              <div class="step-label text-[10px] text-white/40 mb-1">Risk</div>
+              <div class="step-bar h-1 rounded-full bg-white/10" id="bar-risk_manager"></div>
             </div>
             <div class="w-4 text-white/20 text-center text-xs">→</div>
             <div class="pipeline-step pending flex-1 text-center" data-step="quant">
-              <div class="text-[10px] text-white/40 mb-1">Quant</div>
-              <div class="h-1 rounded-full bg-white/10" id="bar-quant"></div>
+              <div class="step-label text-[10px] text-white/40 mb-1">Quant</div>
+              <div class="step-bar h-1 rounded-full bg-white/10" id="bar-quant"></div>
             </div>
             <div class="w-4 text-white/20 text-center text-xs">→</div>
             <div class="pipeline-step pending flex-1 text-center" data-step="portfolio_manager">
-              <div class="text-[10px] text-white/40 mb-1">PM</div>
-              <div class="h-1 rounded-full bg-white/10" id="bar-portfolio_manager"></div>
+              <div class="step-label text-[10px] text-white/40 mb-1">PM</div>
+              <div class="step-bar h-1 rounded-full bg-white/10" id="bar-portfolio_manager"></div>
             </div>
             <div class="w-4 text-white/20 text-center text-xs">→</div>
             <div class="pipeline-step pending flex-1 text-center" data-step="relationship_manager">
-              <div class="text-[10px] text-white/40 mb-1">RM</div>
-              <div class="h-1 rounded-full bg-white/10" id="bar-relationship_manager"></div>
+              <div class="step-label text-[10px] text-white/40 mb-1">RM</div>
+              <div class="step-bar h-1 rounded-full bg-white/10" id="bar-relationship_manager"></div>
             </div>
           </div>
         </div>
