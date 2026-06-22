@@ -129,23 +129,39 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Total Portfolio -->
         <div class="md:col-span-1 bg-[#003f4e] rounded-xl p-5 border border-white/5">
-          <p class="text-white/40 text-xs uppercase tracking-wider mb-2">Portfolio Value</p>
-          <p id="total-value" class="text-2xl font-bold text-white mono">—</p>
-          <p id="total-pnl" class="text-sm mt-1">—</p>
-          <p class="text-white/30 text-xs mt-1" id="fx-rate-label">Starting: $1,000,000 · Oct 1, 2025</p>
-          <!-- Currency selector -->
-          <div class="mt-3 pt-3 border-t border-white/5">
-            <div class="grid grid-cols-5 gap-1" id="currency-pills">
-              <button onclick="selectCurrency('USD')" class="currency-pill active text-[10px] mono py-1 rounded border border-[#e9dd35]/60 bg-[#e9dd35]/10 text-[#e9dd35] transition-all">USD</button>
-              <button onclick="selectCurrency('EUR')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">EUR</button>
-              <button onclick="selectCurrency('GBP')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">GBP</button>
-              <button onclick="selectCurrency('CHF')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">CHF</button>
-              <button onclick="selectCurrency('JPY')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">JPY</button>
-              <button onclick="selectCurrency('CAD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">CAD</button>
-              <button onclick="selectCurrency('AUD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">AUD</button>
-              <button onclick="selectCurrency('SGD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">SGD</button>
-              <button onclick="selectCurrency('HKD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">HKD</button>
-              <button onclick="selectCurrency('AED')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">AED</button>
+          <!-- Tab bar -->
+          <div class="flex gap-0 mb-3 border-b border-white/10">
+            <button onclick="switchPortfolioTab('value')" id="tab-value" class="portfolio-tab text-[10px] uppercase tracking-wider px-3 py-1.5 border-b-2 border-[#e9dd35] text-[#e9dd35] transition-all">Value</button>
+            <button onclick="switchPortfolioTab('bench')" id="tab-bench" class="portfolio-tab text-[10px] uppercase tracking-wider px-3 py-1.5 border-b-2 border-transparent text-white/30 hover:text-white/60 transition-all">vs Market</button>
+          </div>
+
+          <!-- Value view -->
+          <div id="view-value">
+            <p class="text-white/40 text-xs uppercase tracking-wider mb-2">Portfolio Value</p>
+            <p id="total-value" class="text-2xl font-bold text-white mono">—</p>
+            <p id="total-pnl" class="text-sm mt-1">—</p>
+            <p class="text-white/30 text-xs mt-1" id="fx-rate-label">Starting: $1,000,000 · Oct 1, 2025</p>
+            <div class="mt-3 pt-3 border-t border-white/5">
+              <div class="grid grid-cols-5 gap-1" id="currency-pills">
+                <button onclick="selectCurrency('USD')" class="currency-pill active text-[10px] mono py-1 rounded border border-[#e9dd35]/60 bg-[#e9dd35]/10 text-[#e9dd35] transition-all">USD</button>
+                <button onclick="selectCurrency('EUR')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">EUR</button>
+                <button onclick="selectCurrency('GBP')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">GBP</button>
+                <button onclick="selectCurrency('CHF')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">CHF</button>
+                <button onclick="selectCurrency('JPY')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">JPY</button>
+                <button onclick="selectCurrency('CAD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">CAD</button>
+                <button onclick="selectCurrency('AUD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">AUD</button>
+                <button onclick="selectCurrency('SGD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">SGD</button>
+                <button onclick="selectCurrency('HKD')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">HKD</button>
+                <button onclick="selectCurrency('AED')" class="currency-pill text-[10px] mono py-1 rounded border border-white/10 text-white/40 hover:border-white/30 hover:text-white/70 transition-all">AED</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- vs Market view -->
+          <div id="view-bench" style="display:none">
+            <p class="text-white/30 text-[9px] uppercase tracking-wider mb-2">Since Oct 1, 2025 · entry prices est. *</p>
+            <div id="bench-table" class="space-y-0.5">
+              <p class="text-white/20 text-[10px] mono">Loading…</p>
             </div>
           </div>
         </div>
@@ -896,6 +912,90 @@ No jargon. No hedging language. Confident, direct, actionable.`,
           ? 'Starting: $1,000,000 · Oct 1, 2025'
           : `1 USD = ${rate.toFixed(4)} ${code} · Start: ${sym}${Math.round(startUSD * rate).toLocaleString()}`;
       }
+    }
+
+    // ── Portfolio tab switching ──────────────────────────────────────────────
+    function switchPortfolioTab(tab) {
+      document.querySelectorAll('.portfolio-tab').forEach(t => {
+        const isActive = t.id === 'tab-' + tab;
+        t.className = isActive
+          ? 'portfolio-tab text-[10px] uppercase tracking-wider px-3 py-1.5 border-b-2 border-[#e9dd35] text-[#e9dd35] transition-all'
+          : 'portfolio-tab text-[10px] uppercase tracking-wider px-3 py-1.5 border-b-2 border-transparent text-white/30 hover:text-white/60 transition-all';
+      });
+      document.getElementById('view-value').style.display = tab === 'value' ? '' : 'none';
+      document.getElementById('view-bench').style.display = tab === 'bench' ? '' : 'none';
+      if (tab === 'bench') fetchBenchmarks();
+    }
+
+    // ── Benchmark comparison ────────────────────────────────────────────────
+    // Oct 1, 2025 entry prices — BTC/HYPE verified by quant workflow, others est.
+    const BENCHMARKS = [
+      { id: 'btc',  label: 'BTC',     coinId: 'bitcoin',     entry: 118648.93 },
+      { id: 'hype', label: 'HYPE',    coinId: 'hyperliquid', entry: 45.2437 },
+      { id: 'eth',  label: 'ETH',     coinId: 'ethereum',    entry: 2452,    est: true },
+      { id: 'sol',  label: 'SOL',     coinId: 'solana',      entry: 154,     est: true },
+      { id: 'xrp',  label: 'XRP',     coinId: 'ripple',      entry: 0.565,   est: true },
+      { id: 'doge', label: 'DOGE',    coinId: 'dogecoin',    entry: 0.162,   est: true },
+      { id: 'op',   label: 'OP',      coinId: 'optimism',    entry: 1.18,    est: true },
+      { id: 'arb',  label: 'ARB',     coinId: 'arbitrum',    entry: 0.575,   est: true },
+      { id: 'tsla', label: 'TSLA',    isStock: true,         entry: 248,     est: true },
+      { id: 'spy',  label: 'S&P 500', isStock: true,         entry: 568,     est: true },
+    ];
+    const benchCurrents = {};
+
+    async function fetchBenchmarks() {
+      document.getElementById('bench-table').innerHTML = '<p class="text-white/20 text-[10px] mono">Fetching…</p>';
+      const cgIds = BENCHMARKS.filter(b => b.coinId).map(b => b.coinId).join(',');
+      const [cgRes, stockRes] = await Promise.allSettled([
+        fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cgIds}&vs_currencies=usd`),
+        fetch(`${API_BASE}/stock-prices`),
+      ]);
+      if (cgRes.status === 'fulfilled' && cgRes.value.ok) {
+        const d = await cgRes.value.json();
+        for (const b of BENCHMARKS) {
+          if (b.coinId && d[b.coinId]?.usd) benchCurrents[b.id] = d[b.coinId].usd;
+        }
+      }
+      if (stockRes.status === 'fulfilled' && stockRes.value.ok) {
+        const d = await stockRes.value.json();
+        if (d.tsla) benchCurrents.tsla = d.tsla;
+        if (d.spy)  benchCurrents.spy  = d.spy;
+      }
+      renderBenchmarks();
+    }
+
+    function renderBenchmarks() {
+      const portReturn = currentPortfolioUSD ? (currentPortfolioUSD - 1_000_000) / 1_000_000 : null;
+      const portPct = portReturn !== null ? portReturn * 100 : null;
+
+      const pctStr = (pct) => pct !== null ? (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%' : '—';
+      const cls    = (pct) => pct === null ? 'text-white/25' : pct >= 0 ? 'text-green-400' : 'text-red-400';
+
+      // Portfolio row first
+      const portRow = `<div class="flex justify-between items-center py-1 border-b border-white/10 mb-1">
+        <span class="text-[#e9dd35]/80 text-[10px] mono font-semibold">★ Portfolio</span>
+        <span class="text-[#e9dd35] text-[11px] mono font-bold">${pctStr(portPct)}</span>
+      </div>`;
+
+      const rows = BENCHMARKS.map(b => {
+        const cur = benchCurrents[b.id];
+        const pct = cur ? (cur - b.entry) / b.entry * 100 : null;
+        const estMark = b.est ? '<span class="text-white/20">*</span>' : '';
+        return `<div class="flex justify-between items-center py-0.5">
+          <span class="text-white/40 text-[10px] mono">${b.label}${estMark}</span>
+          <span class="${cls(pct)} text-[10px] mono">${pctStr(pct)}</span>
+        </div>`;
+      }).join('');
+
+      // Alpha vs BTC
+      const btcCur = benchCurrents.btc;
+      const btcPct = btcCur ? (btcCur - 118648.93) / 118648.93 * 100 : null;
+      const alpha  = portPct !== null && btcPct !== null ? portPct - btcPct : null;
+      const alphaRow = alpha !== null
+        ? `<div class="mt-2 pt-1.5 border-t border-white/5 flex justify-between"><span class="text-white/25 text-[9px] mono uppercase">Alpha vs BTC</span><span class="text-[#e9dd35]/70 text-[10px] mono">${alpha >= 0 ? '+' : ''}${alpha.toFixed(1)}pp</span></div>`
+        : '';
+
+      document.getElementById('bench-table').innerHTML = portRow + rows + alphaRow;
     }
 
     async function fetchPrices() {
