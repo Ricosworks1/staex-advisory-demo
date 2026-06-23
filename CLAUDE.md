@@ -62,6 +62,28 @@ All agents run with Claude Sonnet 4.6 via `CLAUDE_CODE_OAUTH_TOKEN`. Never use `
 - Modify hard risk limits
 - Override the Risk Manager's hard limits
 
+## Public demo URL and deployment
+
+**Live URL: `https://staex.io/advisory`** — publicly accessible, no login required.
+
+This is the canonical URL to share with Andrej Majcen, Livio Bühler, or any external party.
+
+### How it works (no manual steps needed)
+- The demo HTML source is `public/index.html` in this repo
+- `staex.io/advisory` is a Next.js route in `~/projects/staex.io-neo` that proxies the raw file from this GitLab repo via the GitLab API
+- **Just push to this repo → staex.io/advisory updates within 60 seconds automatically**
+- No sync scripts, no second commit, no gymnastics
+
+### What NOT to do
+- Do not run `sync-to-staex.sh` — it's obsolete and can be deleted
+- Do not edit `~/projects/staex.io-neo/public/advisory/index.html` — it's a stale copy, ignored
+- Do not commit the HTML to staex.io-neo — the proxy reads it live from this repo
+
+### If the demo page needs updating
+1. Edit `public/index.html` in this repo
+2. `git add public/index.html && git commit -m "..." && git push`
+3. Done — staex.io/advisory shows the update within ~60s
+
 ## Key files
 
 | File | Purpose |
@@ -72,6 +94,7 @@ All agents run with Claude Sonnet 4.6 via `CLAUDE_CODE_OAUTH_TOKEN`. Never use `
 | `agents/*/prompt.md` | System prompt for each agent |
 | `data/bpf/` | BPF report snapshots — the intelligence input |
 | `backtests/` | Historical thesis performance — learn from these |
+| `public/index.html` | The live demo page — source of truth for staex.io/advisory |
 
 ## Tone and communication standards
 
