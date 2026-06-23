@@ -148,9 +148,9 @@
         <div>
           <label class="text-white/50 text-xs uppercase tracking-wider block mb-1.5">Risk profile</label>
           <select id="ob-profile" class="w-full bg-[#003f4e] border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-[#e9dd35]/40">
-            <option value="1">Profile 1 — Pure Option Book · 0% BTC · 60% HYPE · 40% Alts</option>
-            <option value="2">Profile 2 — Conviction Plays · 0% BTC · 60% HYPE · 40% Alts</option>
-            <option value="3">Profile 3 — High Beta · 20% BTC · 40% HYPE · 40% Alts</option>
+            <option value="1">Profile 1 — Pure Option Book · 100% HYPE · max aggressive</option>
+            <option value="2">Profile 2 — Conviction Plays · 60% HYPE · 40% dry powder</option>
+            <option value="3">Profile 3 — High Beta · 20% BTC · 60% HYPE · 20% Alts</option>
             <option value="4">Profile 4 — Religion + Growth · 50% BTC · 50% HYPE</option>
             <option value="5" selected>Profile 5 — Balanced · 60% BTC · 25% HYPE · 15% Stable</option>
           </select>
@@ -979,11 +979,11 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     let selectedProfile = 5;
 
     const PROFILES = {
-      1: { name: 'Pure Option Book', btc: 0,  hype: 60, stable: 0,  desc: 'Max aggressive · deep OTM calls' },
-      2: { name: 'Conviction Plays', btc: 0,  hype: 60, stable: 0,  desc: 'ATM calls · 2–3 thesis names' },
-      3: { name: 'High Beta',        btc: 20, hype: 40, stable: 0,  desc: 'ATM+OTM mix · diversified thesis' },
-      4: { name: 'Religion + Growth',btc: 50, hype: 50, stable: 0,  desc: 'ITM + ATM combo · BTC anchor' },
-      5: { name: 'Balanced',         btc: 60, hype: 25, stable: 15, desc: 'Covered call · family office' },
+      1: { name: 'Pure Option Book', btc: 0,  hype: 100, stable: 0,  desc: 'Max aggressive · 100% thesis · no anchor' },
+      2: { name: 'Conviction Plays', btc: 0,  hype: 60,  stable: 0,  desc: '60% thesis · 40% dry powder for alts' },
+      3: { name: 'High Beta',        btc: 20, hype: 60,  stable: 0,  desc: '20% BTC anchor · 60% thesis · 20% alts' },
+      4: { name: 'Religion + Growth',btc: 50, hype: 50,  stable: 0,  desc: '50% BTC religion · 50% thesis · no cash' },
+      5: { name: 'Balanced',         btc: 60, hype: 25,  stable: 15, desc: 'Covered call · family office · yield floor' },
     };
 
     function applyProfileUI() {
