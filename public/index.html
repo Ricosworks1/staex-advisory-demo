@@ -963,9 +963,9 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       if (!isNaN(amount) && amount >= 1000) {
         startAmount = amount;
         document.getElementById('start-amount-input').value = amount;
-        updateCurrencyDisplay();
       }
       document.getElementById('onboarding-modal').style.display = 'none';
+      fetchPrices(); // recalculate portfolio with chosen amount
       document.getElementById('chat-input').focus();
     }
 
@@ -975,8 +975,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       const val = parseFloat(document.getElementById('start-amount-input').value);
       if (!isNaN(val) && val >= 1000) {
         startAmount = val;
-        updateCurrencyDisplay();
-        renderBenchmarks();
+        fetchPrices();
       }
     }
 
