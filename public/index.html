@@ -383,7 +383,7 @@
           <div class="grid grid-cols-3 gap-x-2 gap-y-1 pb-3 mb-3 border-b border-white/5">
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Entry</p>
-              <p class="text-white/80 text-xs mono">$126,000</p>
+              <p class="text-white/80 text-xs mono" id="btc-entry-display">$63,200</p>
             </div>
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Init. alloc</p>
@@ -446,7 +446,7 @@
           <div class="grid grid-cols-3 gap-x-2 gap-y-1 pb-3 mb-3 border-b border-white/5">
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Entry</p>
-              <p class="text-white/80 text-xs mono">$50.00</p>
+              <p class="text-white/80 text-xs mono" id="hype-entry-display">$2.85</p>
             </div>
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Init. alloc</p>
@@ -960,7 +960,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     }
 
     // ── Onboarding modal ────────────────────────────────────────────────────
-    function startSession() {
+    async function startSession() {
       const amount = parseFloat(document.getElementById('ob-amount').value);
       if (!isNaN(amount) && amount >= 1000) {
         startAmount = amount;
@@ -968,15 +968,50 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       }
       const profileVal = parseInt(document.getElementById('ob-profile').value, 10);
       if (PROFILES[profileVal]) selectedProfile = profileVal;
+
+      const dateVal = document.getElementById('ob-date').value;
+      if (dateVal) startDate = dateVal;
+
       applyProfileUI();
       document.getElementById('onboarding-modal').style.display = 'none';
-      fetchPrices(); // recalculate portfolio with chosen amount + profile
+
+      // Fetch historical entry prices for chosen date
+      try {
+        const res = await fetch(`${API_BASE}/historical-prices?date=${startDate}`);
+        const data = await res.json();
+        if (data.btc && data.btc > 0) {
+          btcEntryPrice = data.btc;
+          document.getElementById('btc-entry-display').textContent = '$' + data.btc.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        }
+        if (data.hype && data.hype > 0) {
+          hypeEntryPrice = data.hype;
+          document.getElementById('hype-entry-display').textContent = '$' + data.hype.toFixed(2);
+        }
+        updateDateLabels();
+      } catch(e) {}
+
+      fetchPrices();
       document.getElementById('chat-input').focus();
+    }
+
+    function updateDateLabels() {
+      const d = new Date(startDate + 'T00:00:00');
+      const label = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      const profileEl = document.getElementById('portfolio-profile-label');
+      if (profileEl) {
+        const p = PROFILES[selectedProfile];
+        profileEl.textContent = `Profile ${selectedProfile} — ${p?.name} · Since ${label}`;
+      }
+      const heroLabel = document.getElementById('hero-profile-label');
+      if (heroLabel) heroLabel.textContent = `6 live agents · Profile ${selectedProfile} — ${PROFILES[selectedProfile]?.name}`;
     }
 
     // ── Editable portfolio start amount ────────────────────────────────────
     let startAmount = 1_000_000;
     let selectedProfile = 5;
+    let startDate = '2025-10-01';
+    let btcEntryPrice = 63200;  // Oct 1 2025 default
+    let hypeEntryPrice = 2.85;  // Oct 1 2025 default
 
     const PROFILES = {
       1: { name: 'Pure Option Book', btc: 0,  hype: 100, stable: 0,  desc: 'Max aggressive · 100% thesis · no anchor' },
@@ -1125,7 +1160,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         document.getElementById("hype-change").innerHTML = `<span class="${hypeChg >= 0 ? 'price-up' : 'price-down'}">${hypeChg >= 0 ? "+" : ""}${hypeChg.toFixed(2)}% 24h</span>`;
 
         // Calculate portfolio P&L
-        const btcEntry = 126000, hypeEntry = 50;
+        const btcEntry = btcEntryPrice, hypeEntry = hypeEntryPrice;
         const prof = PROFILES[selectedProfile] || PROFILES[5];
         const btcQty = (startAmount * prof.btc / 100) / btcEntry;
         const hypeQty = (startAmount * prof.hype / 100) / hypeEntry;
