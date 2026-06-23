@@ -368,7 +368,7 @@
         </div>
 
         <!-- BTC position -->
-        <div class="bg-[#003f4e] rounded-xl p-5 border border-white/5">
+        <div id="card-btc" class="bg-[#003f4e] rounded-xl p-5 border border-white/5">
           <div class="flex items-center gap-2 mb-3">
             <div class="w-7 h-7 rounded-full bg-orange-500/20 flex items-center justify-center text-xs flex-shrink-0">₿</div>
             <div>
@@ -428,7 +428,7 @@
         </div>
 
         <!-- HYPE position -->
-        <div class="bg-[#003f4e] rounded-xl p-5 border border-[#e9dd35]/15">
+        <div id="card-hype" class="bg-[#003f4e] rounded-xl p-5 border border-[#e9dd35]/15">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
               <div class="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs text-blue-400 flex-shrink-0">H</div>
@@ -491,7 +491,7 @@
         </div>
 
         <!-- USDC position -->
-        <div class="bg-[#003f4e] rounded-xl p-5 border border-white/5">
+        <div id="card-usdc" class="bg-[#003f4e] rounded-xl p-5 border border-white/5">
           <div class="flex items-center gap-2 mb-3">
             <div class="w-7 h-7 rounded-full bg-green-500/20 flex items-center justify-center text-xs text-green-400 flex-shrink-0">$</div>
             <div>
@@ -989,6 +989,9 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     function applyProfileUI() {
       const p = PROFILES[selectedProfile];
       if (!p) return;
+      const altsPct = 100 - p.btc - p.hype - p.stable; // undeployed/TBD sleeve
+      const cashPct = p.stable + altsPct; // USDC card = stable yield + cash TBD
+
       const shortLabel = `Profile ${selectedProfile} — ${p.name}`;
       const el = document.getElementById('portfolio-profile-label');
       if (el) el.textContent = shortLabel + ' · Since Oct 2025';
@@ -996,12 +999,21 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       if (heroLabel) heroLabel.textContent = `6 live agents · ${shortLabel}`;
       const perfLabel = document.getElementById('perf-profile-label');
       if (perfLabel) perfLabel.textContent = `Profile ${selectedProfile}`;
+
+      // Show/hide position cards based on profile
+      const cardBtc = document.getElementById('card-btc');
+      if (cardBtc) cardBtc.style.display = p.btc > 0 ? '' : 'none';
+      const cardHype = document.getElementById('card-hype');
+      if (cardHype) cardHype.style.display = p.hype > 0 ? '' : 'none';
+      const cardUsdc = document.getElementById('card-usdc');
+      if (cardUsdc) cardUsdc.style.display = cashPct > 0 ? '' : 'none';
+
       const btcInit = document.getElementById('btc-init-alloc');
       if (btcInit) btcInit.textContent = p.btc + '%';
       const hypeInit = document.getElementById('hype-init-alloc');
       if (hypeInit) hypeInit.textContent = p.hype + '%';
       const usdcInit = document.getElementById('usdc-init-alloc');
-      if (usdcInit) usdcInit.textContent = p.stable + '%';
+      if (usdcInit) usdcInit.textContent = cashPct + '%'; // stable + alts TBD
     }
     function updateStartAmount() {
       const val = parseFloat(document.getElementById('start-amount-input').value);
@@ -1141,9 +1153,10 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         const btcAllocEl = document.getElementById("btc-alloc");
         const hypeAllocEl = document.getElementById("hype-alloc");
         const usdcAllocEl = document.getElementById("usdc-alloc");
+        const cashVal = stableVal + undeployedVal; // stable yield + alts sleeve at par
         if (btcAllocEl) btcAllocEl.textContent = (btcVal / totalVal * 100).toFixed(1) + "%";
         if (hypeAllocEl) hypeAllocEl.textContent = (hypeVal / totalVal * 100).toFixed(1) + "%";
-        if (usdcAllocEl) usdcAllocEl.textContent = (stableVal / totalVal * 100).toFixed(1) + "%";
+        if (usdcAllocEl) usdcAllocEl.textContent = (cashVal / totalVal * 100).toFixed(1) + "%";
 
         document.getElementById("price-status").textContent = "Updated " + new Date().toLocaleTimeString();
       } catch (e) {
@@ -1151,6 +1164,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       }
     }
 
+    applyProfileUI(); // set initial card visibility for default profile
     fetchPrices();
     fetchFxRates();
     setInterval(fetchPrices, 60000);
