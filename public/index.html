@@ -111,7 +111,198 @@
     </div>
   </header>
 
+  <!-- Onboarding modal -->
+  <div id="onboarding-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#001f2b] border border-white/10 rounded-2xl p-8 w-full max-w-md shadow-2xl">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl bg-[#e9dd35] flex items-center justify-center text-[#002f3b] font-black text-base flex-shrink-0">S</div>
+        <div>
+          <h2 class="text-white font-bold text-lg leading-tight">AI Advisory Agentic Suite</h2>
+          <p class="text-white/40 text-xs">6 live agents · Powered by Staex MCC</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-white/50 text-xs uppercase tracking-wider block mb-1.5">Portfolio size (USD)</label>
+          <div class="flex items-center gap-2 bg-[#003f4e] border border-white/10 rounded-xl px-4 py-3">
+            <span class="text-white/40">$</span>
+            <input id="ob-amount" type="number" value="1000000" min="10000" step="10000"
+              class="flex-1 bg-transparent text-white font-semibold mono text-lg outline-none" />
+          </div>
+          <div class="flex gap-2 mt-2">
+            <button onclick="document.getElementById('ob-amount').value=100000" class="text-[10px] text-white/40 hover:text-white/70 border border-white/10 rounded px-2 py-1 transition-colors">$100K</button>
+            <button onclick="document.getElementById('ob-amount').value=500000" class="text-[10px] text-white/40 hover:text-white/70 border border-white/10 rounded px-2 py-1 transition-colors">$500K</button>
+            <button onclick="document.getElementById('ob-amount').value=1000000" class="text-[10px] text-white/40 hover:text-white/70 border border-white/10 rounded px-2 py-1 transition-colors">$1M</button>
+            <button onclick="document.getElementById('ob-amount').value=5000000" class="text-[10px] text-white/40 hover:text-white/70 border border-white/10 rounded px-2 py-1 transition-colors">$5M</button>
+            <button onclick="document.getElementById('ob-amount').value=10000000" class="text-[10px] text-white/40 hover:text-white/70 border border-white/10 rounded px-2 py-1 transition-colors">$10M</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-white/50 text-xs uppercase tracking-wider block mb-1.5">Entry date</label>
+          <input id="ob-date" type="date" value="2025-10-01"
+            class="w-full bg-[#003f4e] border border-white/10 rounded-xl px-4 py-3 text-white mono outline-none focus:border-[#e9dd35]/40" />
+        </div>
+
+        <div>
+          <label class="text-white/50 text-xs uppercase tracking-wider block mb-1.5">Risk profile</label>
+          <select id="ob-profile" class="w-full bg-[#003f4e] border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-[#e9dd35]/40">
+            <option value="5" selected>Profile 5 — Balanced (60% BTC · 25% HYPE · 15% Stable)</option>
+            <option value="1">Profile 1 — Pure Option Book (aggressive)</option>
+            <option value="3">Profile 3 — High Beta Diversified</option>
+            <option value="7">Profile 7 — BTC Core (80% BTC)</option>
+            <option value="9">Profile 9 — Yield First (stable-heavy)</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="startSession()" class="mt-6 w-full bg-[#e9dd35] hover:bg-[#c4b920] text-[#002f3b] font-bold py-3.5 rounded-xl text-sm transition-colors">
+        Launch Advisory Suite →
+      </button>
+      <p class="text-white/20 text-[10px] text-center mt-3">Demo only · No real trades executed · AI output is not financial advice</p>
+    </div>
+  </div>
+
   <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+    <!-- Hero: Chat + Agent Suite -->
+    <section>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" style="min-height: 540px">
+
+        <!-- Agent Suite sidebar -->
+        <div class="lg:col-span-1 flex flex-col gap-3">
+          <div class="mb-1">
+            <p class="text-white/60 text-xs uppercase tracking-wider mb-0.5">Agentic Suite · 6 live agents</p>
+            <p class="text-white/25 text-[10px]">Click any agent to talk directly</p>
+          </div>
+          <div class="space-y-1.5">
+            <div class="agent-card cursor-pointer px-4 py-3 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="research" onclick="selectAgent(this)">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/50 text-[10px] flex-shrink-0">RA</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-white text-xs font-medium">Research Analyst</p>
+                  <p class="text-white/30 text-[10px]">webthreepedia · BPF reading</p>
+                </div>
+                <button onclick="event.stopPropagation(); openPersonality('research')" class="p-1 rounded text-white/20 hover:text-[#e9dd35] transition-colors flex-shrink-0">✎</button>
+                <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0"></div>
+              </div>
+            </div>
+            <div class="agent-card cursor-pointer px-4 py-3 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="cio" onclick="selectAgent(this)">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/50 text-[10px] flex-shrink-0">CIO</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-white text-xs font-medium">Chief Investment Officer</p>
+                  <p class="text-white/30 text-[10px]">Strategy · Allocation targets</p>
+                </div>
+                <button onclick="event.stopPropagation(); openPersonality('cio')" class="p-1 rounded text-white/20 hover:text-[#e9dd35] transition-colors flex-shrink-0">✎</button>
+                <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0"></div>
+              </div>
+            </div>
+            <div class="agent-card cursor-pointer px-4 py-3 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="risk_manager" onclick="selectAgent(this)">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/50 text-[10px] flex-shrink-0">RSK</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-white text-xs font-medium">Risk Manager</p>
+                  <p class="text-white/30 text-[10px]">Hard limits · Drawdown alerts</p>
+                </div>
+                <button onclick="event.stopPropagation(); openPersonality('risk_manager')" class="p-1 rounded text-white/20 hover:text-[#e9dd35] transition-colors flex-shrink-0">✎</button>
+                <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0"></div>
+              </div>
+            </div>
+            <div class="agent-card cursor-pointer px-4 py-3 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="quant" onclick="selectAgent(this)">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/50 text-[10px] flex-shrink-0">QA</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-white text-xs font-medium">Quantitative Analyst</p>
+                  <p class="text-white/30 text-[10px]">Backtests · Signal memos</p>
+                </div>
+                <button onclick="event.stopPropagation(); openPersonality('quant')" class="p-1 rounded text-white/20 hover:text-[#e9dd35] transition-colors flex-shrink-0">✎</button>
+                <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0"></div>
+              </div>
+            </div>
+            <div class="agent-card cursor-pointer px-4 py-3 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="portfolio_manager" onclick="selectAgent(this)">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/50 text-[10px] flex-shrink-0">PM</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-white text-xs font-medium">Portfolio Manager</p>
+                  <p class="text-white/30 text-[10px]">Positions · Rebalancing</p>
+                </div>
+                <button onclick="event.stopPropagation(); openPersonality('portfolio_manager')" class="p-1 rounded text-white/20 hover:text-[#e9dd35] transition-colors flex-shrink-0">✎</button>
+                <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0"></div>
+              </div>
+            </div>
+            <div class="agent-card active cursor-pointer px-4 py-3 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="relationship_manager" onclick="selectAgent(this)">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/50 text-sm flex-shrink-0">RM</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-white text-xs font-medium">Relationship Manager</p>
+                  <p class="text-white/30 text-[10px]">Client advisory · Daily briefings</p>
+                </div>
+                <button onclick="event.stopPropagation(); openPersonality('relationship_manager')" class="p-1 rounded text-white/20 hover:text-[#e9dd35] transition-colors flex-shrink-0">✎</button>
+                <div class="w-1.5 h-1.5 rounded-full bg-[#e9dd35] animate-pulse flex-shrink-0"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Active Thesis -->
+          <div class="mt-2 p-4 rounded-xl border border-[#e9dd35]/20 bg-[#003f4e]/40">
+            <p class="text-[#e9dd35] text-[10px] uppercase tracking-wider mb-2">Active Thesis · BPF June 2026</p>
+            <div class="flex items-center gap-2 mb-1.5">
+              <div class="w-5 h-5 rounded bg-blue-500/20 flex items-center justify-center text-[10px] text-blue-400">H</div>
+              <p class="text-white font-medium text-xs">Hyperliquid (HYPE)</p>
+            </div>
+            <p class="text-white/50 text-[10px] leading-relaxed">70% DEX market share · $13B ann. revenue · 97% buyback · ETF live · Thesis intact ✓</p>
+          </div>
+        </div>
+
+        <!-- Chat (main) -->
+        <div class="lg:col-span-2 flex flex-col">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <p class="text-white/40 text-xs">Talking to: <span id="current-agent-label" class="text-[#e9dd35]">Relationship Manager</span></p>
+            </div>
+            <span class="text-xs bg-green-400/10 text-green-400 px-3 py-1 rounded-full border border-green-400/20 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block"></span>
+              Live · Claude Opus
+            </span>
+          </div>
+
+          <div id="chat-messages" class="flex-1 bg-[#003f4e] rounded-xl border border-white/5 p-5 space-y-4 overflow-y-auto scrollbar-hide" style="min-height:320px; max-height:420px">
+            <div class="chat-msg flex gap-3">
+              <div class="w-7 h-7 rounded-lg bg-[#e9dd35]/10 flex items-center justify-center text-[#e9dd35] text-xs flex-shrink-0 mt-0.5">RM</div>
+              <div class="flex-1">
+                <p class="text-white/40 text-xs mb-1">Relationship Manager · just now</p>
+                <div class="text-white/85 text-sm leading-relaxed space-y-2">
+                  <p>Good morning. Your portfolio is holding well in a difficult market.</p>
+                  <p>Since October 2025, the broader crypto market is down 47%. Your balanced portfolio has significantly outperformed — HYPE has hit new all-time highs while Bitcoin declined nearly 50% from its peak.</p>
+                  <p>What would you like to discuss?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button onclick="sendSuggestion(this)" class="text-xs bg-white/5 hover:bg-white/10 text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 transition-colors">What is the HYPE thesis?</button>
+            <button onclick="sendSuggestion(this)" class="text-xs bg-white/5 hover:bg-white/10 text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 transition-colors">What is my risk exposure?</button>
+            <button onclick="sendSuggestion(this)" class="text-xs bg-white/5 hover:bg-white/10 text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 transition-colors">Should I rebalance now?</button>
+            <button onclick="sendSuggestion(this)" class="text-xs bg-white/5 hover:bg-white/10 text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 transition-colors">Explain the token-as-option framework</button>
+          </div>
+
+          <div class="mt-3 flex gap-2">
+            <input id="chat-input" type="text" placeholder="Ask the advisory team anything…"
+              class="flex-1 bg-[#003f4e] border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#e9dd35]/40"
+              onkeydown="if(event.key==='Enter')sendMessage()" />
+            <button onclick="sendMessage()" id="send-btn"
+              class="bg-[#e9dd35] hover:bg-[#c4b920] text-[#002f3b] font-bold px-5 py-3.5 rounded-xl text-sm transition-colors">Send</button>
+            <button onclick="runPipeline()" id="pipeline-btn" title="Run full 6-agent team analysis"
+              class="bg-[#003f4e] hover:bg-[#004d60] border border-[#e9dd35]/30 hover:border-[#e9dd35]/60 text-[#e9dd35] font-medium px-4 py-3.5 rounded-xl text-xs transition-colors whitespace-nowrap">
+              Team Analysis
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <!-- Portfolio Overview -->
     <section>
@@ -383,174 +574,6 @@
         </div>
       </div>
     </section>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-      <!-- Agent Team -->
-      <div class="lg:col-span-1">
-        <h3 class="text-white font-semibold mb-1">Agent Team</h3>
-        <p class="text-white/40 text-xs mb-4">Click an agent to query them directly</p>
-        <div class="space-y-2">
-          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="research" onclick="selectAgent(this)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">RA</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-white text-sm font-medium">Research Analyst</p>
-                <p class="text-white/40 text-xs">BPF reading · Thesis memos</p>
-              </div>
-              <button onclick="event.stopPropagation(); openPersonality('research')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
-              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
-            </div>
-          </div>
-          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="cio" onclick="selectAgent(this)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">CIO</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-white text-sm font-medium">Chief Investment Officer</p>
-                <p class="text-white/40 text-xs">Strategy · Allocation targets</p>
-              </div>
-              <button onclick="event.stopPropagation(); openPersonality('cio')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
-              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
-            </div>
-          </div>
-          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="risk_manager" onclick="selectAgent(this)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">RSK</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-white text-sm font-medium">Risk Manager</p>
-                <p class="text-white/40 text-xs">Hard limits · Drawdown alerts</p>
-              </div>
-              <button onclick="event.stopPropagation(); openPersonality('risk_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
-              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
-            </div>
-          </div>
-          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="quant" onclick="selectAgent(this)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">QA</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-white text-sm font-medium">Quantitative Analyst</p>
-                <p class="text-white/40 text-xs">Backtests · Signal memos</p>
-              </div>
-              <button onclick="event.stopPropagation(); openPersonality('quant')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
-              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
-            </div>
-          </div>
-          <div class="agent-card cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="portfolio_manager" onclick="selectAgent(this)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-xs flex-shrink-0">PM</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-white text-sm font-medium">Portfolio Manager</p>
-                <p class="text-white/40 text-xs">Positions · Rebalancing</p>
-              </div>
-              <button onclick="event.stopPropagation(); openPersonality('portfolio_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
-              <div class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></div>
-            </div>
-          </div>
-          <div class="agent-card active cursor-pointer p-4 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="relationship_manager" onclick="selectAgent(this)">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 text-sm flex-shrink-0">RM</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-white text-sm font-medium">Relationship Manager</p>
-                <p class="text-white/40 text-xs">Client advisory · Daily briefings</p>
-              </div>
-              <button onclick="event.stopPropagation(); openPersonality('relationship_manager')" class="p-1.5 rounded-md text-white/20 hover:text-[#e9dd35] hover:bg-[#e9dd35]/10 transition-colors flex-shrink-0" title="Edit personality">✎</button>
-              <div class="w-2 h-2 rounded-full bg-[#e9dd35] flex-shrink-0"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Active Thesis -->
-        <div class="mt-6 p-4 rounded-xl border border-[#e9dd35]/20 bg-[#003f4e]/40">
-          <p class="text-[#e9dd35] text-xs uppercase tracking-wider mb-3">Active Thesis</p>
-          <div class="flex items-center gap-2 mb-2">
-            <div class="w-5 h-5 rounded bg-blue-500/20 flex items-center justify-center text-xs text-blue-400">H</div>
-            <p class="text-white font-medium text-sm">Hyperliquid (HYPE)</p>
-          </div>
-          <p class="text-white/60 text-xs leading-relaxed mb-3">DEX dominance + institutional perps. $13B annualised revenue. 97% buyback model. ETF live (Bitwise BHYP).</p>
-          <div class="space-y-1 text-xs">
-            <div class="flex justify-between">
-              <span class="text-white/40">Entry (Oct 2025)</span>
-              <span class="text-white mono">$50.00</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-white/40">ATH (Jun 16, 2026)</span>
-              <span class="text-green-400 mono">$76.70</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-white/40">Max drawdown</span>
-              <span class="text-red-400 mono">-50.3%</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-white/40">Thesis status</span>
-              <span class="text-green-400">Intact ✓</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-  <!-- Floating Advisory Chat -->
-  <div id="chat-float" class="fixed bottom-6 right-6 z-40 flex flex-col" style="width:380px">
-    <!-- Collapsed bubble -->
-    <div id="chat-bubble" class="ml-auto cursor-pointer" onclick="toggleChat()">
-      <div class="flex items-center gap-3 bg-[#e9dd35] text-[#002f3b] px-4 py-3 rounded-2xl shadow-2xl font-semibold text-sm">
-        <div class="w-2 h-2 rounded-full bg-[#002f3b]/40 animate-pulse"></div>
-        Ask the Advisory Team
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z"/></svg>
-      </div>
-    </div>
-
-    <!-- Expanded panel -->
-    <div id="chat-panel" class="hidden flex-col bg-[#001f2b] border border-white/10 rounded-2xl shadow-2xl overflow-hidden" style="height:560px">
-      <!-- Panel header -->
-      <div class="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#002f3b] flex-shrink-0">
-        <div class="flex items-center gap-2">
-          <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-          <span class="text-white text-sm font-semibold">Advisory Chat</span>
-          <span class="text-white/30 text-xs">·</span>
-          <span class="text-[#e9dd35] text-xs" id="current-agent-label">Relationship Manager</span>
-        </div>
-        <button onclick="toggleChat()" class="text-white/30 hover:text-white/70 text-lg leading-none">×</button>
-      </div>
-
-      <!-- Messages -->
-      <div id="chat-messages" class="flex-1 p-4 space-y-4 overflow-y-auto scrollbar-hide text-sm">
-        <div class="chat-msg flex gap-2">
-          <div class="w-6 h-6 rounded-lg bg-[#e9dd35]/10 flex items-center justify-center text-[#e9dd35] text-[10px] flex-shrink-0 mt-0.5">RM</div>
-          <div class="flex-1">
-            <p class="text-white/30 text-[10px] mb-1">Relationship Manager · just now</p>
-            <div class="text-white/80 text-sm leading-relaxed space-y-2">
-              <p>Good morning. Your portfolio is holding well in a difficult market.</p>
-              <p>Since October 2025, the broader crypto market is down 47%. Your balanced portfolio has significantly outperformed — HYPE has hit new all-time highs while Bitcoin declined nearly 50% from its peak.</p>
-              <p>What would you like to discuss?</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Suggestions -->
-      <div class="px-3 pb-2 flex flex-wrap gap-1.5 flex-shrink-0 border-t border-white/5 pt-2">
-        <button onclick="sendSuggestion(this)" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 transition-colors">HYPE thesis?</button>
-        <button onclick="sendSuggestion(this)" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 transition-colors">My risk exposure?</button>
-        <button onclick="sendSuggestion(this)" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 transition-colors">Should I rebalance?</button>
-        <button onclick="sendSuggestion(this)" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 transition-colors">Token-as-option?</button>
-      </div>
-
-      <!-- Input -->
-      <div class="px-3 pb-3 flex gap-2 flex-shrink-0">
-        <input id="chat-input" type="text" placeholder="Ask anything…"
-          class="flex-1 bg-[#003f4e] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#e9dd35]/40"
-          onkeydown="if(event.key==='Enter')sendMessage()" />
-        <button onclick="sendMessage()" id="send-btn"
-          class="bg-[#e9dd35] hover:bg-[#c4b920] text-[#002f3b] font-semibold px-3 py-2.5 rounded-xl text-sm transition-colors">→</button>
-        <button onclick="runPipeline()" id="pipeline-btn" title="Full 6-agent team analysis"
-          class="bg-[#003f4e] border border-[#e9dd35]/30 hover:border-[#e9dd35]/60 text-[#e9dd35] font-medium px-3 py-2.5 rounded-xl text-[10px] transition-colors whitespace-nowrap">
-          Team
-        </button>
-      </div>
-    </div>
-  </div>
 
     <!-- Pipeline results panel (shown after Team Analysis) -->
     <section id="pipeline-panel" class="hidden">
@@ -934,18 +957,16 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       }
     }
 
-    // ── Floating chat toggle ────────────────────────────────────────────────
-    let chatOpen = false;
-    function toggleChat() {
-      chatOpen = !chatOpen;
-      document.getElementById('chat-bubble').style.display = chatOpen ? 'none' : 'block';
-      const panel = document.getElementById('chat-panel');
-      panel.style.display = chatOpen ? 'flex' : 'none';
-      if (chatOpen) {
-        const msgs = document.getElementById('chat-messages');
-        msgs.scrollTop = msgs.scrollHeight;
-        document.getElementById('chat-input').focus();
+    // ── Onboarding modal ────────────────────────────────────────────────────
+    function startSession() {
+      const amount = parseFloat(document.getElementById('ob-amount').value);
+      if (!isNaN(amount) && amount >= 1000) {
+        startAmount = amount;
+        document.getElementById('start-amount-input').value = amount;
+        updateCurrencyDisplay();
       }
+      document.getElementById('onboarding-modal').style.display = 'none';
+      document.getElementById('chat-input').focus();
     }
 
     // ── Editable portfolio start amount ────────────────────────────────────
