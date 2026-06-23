@@ -148,11 +148,11 @@
         <div>
           <label class="text-white/50 text-xs uppercase tracking-wider block mb-1.5">Risk profile</label>
           <select id="ob-profile" class="w-full bg-[#003f4e] border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-[#e9dd35]/40">
-            <option value="5" selected>Profile 5 — Balanced (60% BTC · 25% HYPE · 15% Stable)</option>
-            <option value="1">Profile 1 — Pure Option Book (aggressive)</option>
-            <option value="3">Profile 3 — High Beta Diversified</option>
-            <option value="7">Profile 7 — BTC Core (80% BTC)</option>
-            <option value="9">Profile 9 — Yield First (stable-heavy)</option>
+            <option value="1">Profile 1 — Pure Option Book · 0% BTC · 60% HYPE · 40% Alts</option>
+            <option value="2">Profile 2 — Conviction Plays · 0% BTC · 60% HYPE · 40% Alts</option>
+            <option value="3">Profile 3 — High Beta · 20% BTC · 40% HYPE · 40% Alts</option>
+            <option value="4">Profile 4 — Religion + Growth · 50% BTC · 50% HYPE</option>
+            <option value="5" selected>Profile 5 — Balanced · 60% BTC · 25% HYPE · 15% Stable</option>
           </select>
         </div>
       </div>
@@ -168,14 +168,16 @@
 
     <!-- Hero: Chat + Agent Suite -->
     <section>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-white font-semibold text-lg">Agentic Suite</h2>
+          <p class="text-white/40 text-sm" id="hero-profile-label">6 live agents · Profile 5 — Balanced</p>
+        </div>
+      </div>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" style="min-height: 540px">
 
         <!-- Agent Suite sidebar -->
         <div class="lg:col-span-1 flex flex-col gap-3">
-          <div class="mb-1">
-            <p class="text-white/60 text-xs uppercase tracking-wider mb-0.5">Agentic Suite · 6 live agents</p>
-            <p class="text-white/25 text-[10px]">Click any agent to talk directly</p>
-          </div>
           <div class="space-y-1.5">
             <div class="agent-card cursor-pointer px-4 py-3 rounded-xl border border-white/10 bg-[#003f4e]/40" data-agent="research" onclick="selectAgent(this)">
               <div class="flex items-center gap-3">
@@ -309,7 +311,7 @@
       <div class="flex items-center justify-between mb-4">
         <div>
           <h2 class="text-white font-semibold text-lg">Portfolio Overview</h2>
-          <p class="text-white/40 text-sm">Profile 5 — Balanced · Since Oct 2025</p>
+          <p class="text-white/40 text-sm" id="portfolio-profile-label">Profile 5 — Balanced · Since Oct 2025</p>
         </div>
         <div class="text-right">
           <p class="text-white/40 text-xs uppercase tracking-wider mb-1">Live prices</p>
@@ -385,7 +387,7 @@
             </div>
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Init. alloc</p>
-              <p class="text-white/80 text-xs mono">60%</p>
+              <p class="text-white/80 text-xs mono" id="btc-init-alloc">60%</p>
             </div>
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Curr. alloc</p>
@@ -448,7 +450,7 @@
             </div>
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Init. alloc</p>
-              <p class="text-white/80 text-xs mono">25%</p>
+              <p class="text-white/80 text-xs mono" id="hype-init-alloc">25%</p>
             </div>
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Curr. alloc</p>
@@ -508,7 +510,7 @@
             </div>
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Init. alloc</p>
-              <p class="text-white/80 text-xs mono">15%</p>
+              <p class="text-white/80 text-xs mono" id="usdc-init-alloc">15%</p>
             </div>
             <div>
               <p class="text-white/30 text-[10px] uppercase tracking-wider mb-0.5">Curr. alloc</p>
@@ -555,7 +557,7 @@
         <div class="text-center p-4 bg-[#002f3b] rounded-lg border border-[#e9dd35]/20">
           <p class="text-white/40 text-xs mb-2 uppercase tracking-wider">This portfolio</p>
           <p class="text-xl font-bold text-[#e9dd35] mono" id="perf-portfolio">~$838K</p>
-          <p class="text-xs text-white/40 mt-1">Profile 5</p>
+          <p class="text-xs text-white/40 mt-1" id="perf-profile-label">Profile 5</p>
         </div>
         <div class="text-center p-4 bg-[#002f3b] rounded-lg border border-white/5">
           <p class="text-white/40 text-xs mb-2 uppercase tracking-wider">BTC buy-and-hold</p>
@@ -964,13 +966,43 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         startAmount = amount;
         document.getElementById('start-amount-input').value = amount;
       }
+      const profileVal = parseInt(document.getElementById('ob-profile').value, 10);
+      if (PROFILES[profileVal]) selectedProfile = profileVal;
+      applyProfileUI();
       document.getElementById('onboarding-modal').style.display = 'none';
-      fetchPrices(); // recalculate portfolio with chosen amount
+      fetchPrices(); // recalculate portfolio with chosen amount + profile
       document.getElementById('chat-input').focus();
     }
 
     // ── Editable portfolio start amount ────────────────────────────────────
     let startAmount = 1_000_000;
+    let selectedProfile = 5;
+
+    const PROFILES = {
+      1: { name: 'Pure Option Book', btc: 0,  hype: 60, stable: 0,  desc: 'Max aggressive · deep OTM calls' },
+      2: { name: 'Conviction Plays', btc: 0,  hype: 60, stable: 0,  desc: 'ATM calls · 2–3 thesis names' },
+      3: { name: 'High Beta',        btc: 20, hype: 40, stable: 0,  desc: 'ATM+OTM mix · diversified thesis' },
+      4: { name: 'Religion + Growth',btc: 50, hype: 50, stable: 0,  desc: 'ITM + ATM combo · BTC anchor' },
+      5: { name: 'Balanced',         btc: 60, hype: 25, stable: 15, desc: 'Covered call · family office' },
+    };
+
+    function applyProfileUI() {
+      const p = PROFILES[selectedProfile];
+      if (!p) return;
+      const shortLabel = `Profile ${selectedProfile} — ${p.name}`;
+      const el = document.getElementById('portfolio-profile-label');
+      if (el) el.textContent = shortLabel + ' · Since Oct 2025';
+      const heroLabel = document.getElementById('hero-profile-label');
+      if (heroLabel) heroLabel.textContent = `6 live agents · ${shortLabel}`;
+      const perfLabel = document.getElementById('perf-profile-label');
+      if (perfLabel) perfLabel.textContent = `Profile ${selectedProfile}`;
+      const btcInit = document.getElementById('btc-init-alloc');
+      if (btcInit) btcInit.textContent = p.btc + '%';
+      const hypeInit = document.getElementById('hype-init-alloc');
+      if (hypeInit) hypeInit.textContent = p.hype + '%';
+      const usdcInit = document.getElementById('usdc-init-alloc');
+      if (usdcInit) usdcInit.textContent = p.stable + '%';
+    }
     function updateStartAmount() {
       const val = parseFloat(document.getElementById('start-amount-input').value);
       if (!isNaN(val) && val >= 1000) {
@@ -1082,9 +1114,10 @@ No jargon. No hedging language. Confident, direct, actionable.`,
 
         // Calculate portfolio P&L (weights: 60% BTC, 25% HYPE, 15% stable)
         const btcEntry = 126000, hypeEntry = 50;
-        const btcQty = (startAmount * 0.60) / btcEntry;
-        const hypeQty = (startAmount * 0.25) / hypeEntry;
-        const stableVal = startAmount * 0.15 * 1.06; // 6% APY
+        const prof = PROFILES[selectedProfile] || PROFILES[5];
+        const btcQty = (startAmount * prof.btc / 100) / btcEntry;
+        const hypeQty = (startAmount * prof.hype / 100) / hypeEntry;
+        const stableVal = startAmount * (prof.stable / 100) * 1.06; // 6% APY
         const btcVal = btcQty * btc;
         const hypeVal = hypeQty * hype;
         const totalVal = btcVal + hypeVal + stableVal;
