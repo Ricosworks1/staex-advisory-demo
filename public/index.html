@@ -140,7 +140,15 @@
             <p class="text-white/40 text-xs uppercase tracking-wider mb-2">Portfolio Value</p>
             <p id="total-value" class="text-2xl font-bold text-white mono">—</p>
             <p id="total-pnl" class="text-sm mt-1">—</p>
-            <p class="text-white/30 text-xs mt-1" id="fx-rate-label">Starting: $1,000,000 · Oct 1, 2025</p>
+            <div class="flex items-center gap-1.5 mt-1">
+              <span class="text-white/30 text-xs">Start:</span>
+              <span class="text-white/30 text-xs">$</span>
+              <input id="start-amount-input" type="number" value="1000000" min="1000" step="1000"
+                class="bg-transparent text-white/50 text-xs mono w-24 border-b border-white/10 focus:border-[#e9dd35]/40 focus:text-white/80 outline-none"
+                onchange="updateStartAmount()" onblur="updateStartAmount()" />
+              <span class="text-white/30 text-xs">· Oct 1, 2025</span>
+            </div>
+            <p class="text-white/20 text-[10px] mt-0.5" id="fx-rate-label"></p>
             <div class="mt-3 pt-3 border-t border-white/5">
               <div class="grid grid-cols-5 gap-1" id="currency-pills">
                 <button onclick="selectCurrency('USD')" class="currency-pill active text-[10px] mono py-1 rounded border border-[#e9dd35]/60 bg-[#e9dd35]/10 text-[#e9dd35] transition-all">USD</button>
@@ -480,56 +488,69 @@
         </div>
       </div>
 
-      <!-- Chat Interface -->
-      <div class="lg:col-span-2 flex flex-col">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <h3 class="text-white font-semibold">Advisory Chat</h3>
-            <p class="text-white/40 text-xs">Talking to: <span id="current-agent-label" class="text-[#e9dd35]">Relationship Manager</span></p>
-          </div>
-          <span class="text-xs bg-green-400/10 text-green-400 px-3 py-1 rounded-full border border-green-400/20">Live · Claude Sonnet</span>
-        </div>
+    </div>
 
-        <div id="chat-messages" class="flex-1 bg-[#003f4e] rounded-xl border border-white/5 p-5 space-y-4 overflow-y-auto scrollbar-hide" style="min-height:380px; max-height:480px;">
-          <!-- Welcome message -->
-          <div class="chat-msg flex gap-3">
-            <div class="w-7 h-7 rounded-lg bg-[#e9dd35]/10 flex items-center justify-center text-[#e9dd35] text-xs flex-shrink-0 mt-0.5">RM</div>
-            <div class="flex-1">
-              <p class="text-white/40 text-xs mb-1">Relationship Manager · just now</p>
-              <div class="text-white/85 text-sm leading-relaxed space-y-2">
-                <p>Good morning. Your portfolio is holding well in a difficult market.</p>
-                <p>Since October 2025, the broader crypto market is down 47%. Your balanced portfolio — 60% Bitcoin, 25% HYPE, 15% USDC — has significantly outperformed, primarily because HYPE has hit new all-time highs while Bitcoin has declined nearly 50% from its peak.</p>
-                <p>The HYPE thesis we entered at $50 is validated: the Bitwise ETF is live, buybacks are running, and institutional flows are moving from Bitcoin ETFs into HYPE products. The risk manager confirms all positions are within limits. No rebalancing required this week.</p>
-                <p>What would you like to discuss?</p>
-              </div>
+  <!-- Floating Advisory Chat -->
+  <div id="chat-float" class="fixed bottom-6 right-6 z-40 flex flex-col" style="width:380px">
+    <!-- Collapsed bubble -->
+    <div id="chat-bubble" class="ml-auto cursor-pointer" onclick="toggleChat()">
+      <div class="flex items-center gap-3 bg-[#e9dd35] text-[#002f3b] px-4 py-3 rounded-2xl shadow-2xl font-semibold text-sm">
+        <div class="w-2 h-2 rounded-full bg-[#002f3b]/40 animate-pulse"></div>
+        Ask the Advisory Team
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z"/></svg>
+      </div>
+    </div>
+
+    <!-- Expanded panel -->
+    <div id="chat-panel" class="hidden flex-col bg-[#001f2b] border border-white/10 rounded-2xl shadow-2xl overflow-hidden" style="height:560px">
+      <!-- Panel header -->
+      <div class="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#002f3b] flex-shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+          <span class="text-white text-sm font-semibold">Advisory Chat</span>
+          <span class="text-white/30 text-xs">·</span>
+          <span class="text-[#e9dd35] text-xs" id="current-agent-label">Relationship Manager</span>
+        </div>
+        <button onclick="toggleChat()" class="text-white/30 hover:text-white/70 text-lg leading-none">×</button>
+      </div>
+
+      <!-- Messages -->
+      <div id="chat-messages" class="flex-1 p-4 space-y-4 overflow-y-auto scrollbar-hide text-sm">
+        <div class="chat-msg flex gap-2">
+          <div class="w-6 h-6 rounded-lg bg-[#e9dd35]/10 flex items-center justify-center text-[#e9dd35] text-[10px] flex-shrink-0 mt-0.5">RM</div>
+          <div class="flex-1">
+            <p class="text-white/30 text-[10px] mb-1">Relationship Manager · just now</p>
+            <div class="text-white/80 text-sm leading-relaxed space-y-2">
+              <p>Good morning. Your portfolio is holding well in a difficult market.</p>
+              <p>Since October 2025, the broader crypto market is down 47%. Your balanced portfolio has significantly outperformed — HYPE has hit new all-time highs while Bitcoin declined nearly 50% from its peak.</p>
+              <p>What would you like to discuss?</p>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Suggested questions -->
-        <div class="mt-3 flex flex-wrap gap-2">
-          <button onclick="sendSuggestion(this)" class="text-xs bg-white/5 hover:bg-white/10 text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 transition-colors">What is the HYPE thesis?</button>
-          <button onclick="sendSuggestion(this)" class="text-xs bg-white/5 hover:bg-white/10 text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 transition-colors">What is my risk exposure?</button>
-          <button onclick="sendSuggestion(this)" class="text-xs bg-white/5 hover:bg-white/10 text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 transition-colors">Should I rebalance now?</button>
-          <button onclick="sendSuggestion(this)" class="text-xs bg-white/5 hover:bg-white/10 text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 transition-colors">Explain the token-as-option framework</button>
-        </div>
+      <!-- Suggestions -->
+      <div class="px-3 pb-2 flex flex-wrap gap-1.5 flex-shrink-0 border-t border-white/5 pt-2">
+        <button onclick="sendSuggestion(this)" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 transition-colors">HYPE thesis?</button>
+        <button onclick="sendSuggestion(this)" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 transition-colors">My risk exposure?</button>
+        <button onclick="sendSuggestion(this)" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 transition-colors">Should I rebalance?</button>
+        <button onclick="sendSuggestion(this)" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 transition-colors">Token-as-option?</button>
+      </div>
 
-        <!-- Input -->
-        <div class="mt-3 flex gap-2">
-          <input id="chat-input" type="text" placeholder="Ask the agent team anything…"
-            class="flex-1 bg-[#003f4e] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#e9dd35]/40"
-            onkeydown="if(event.key==='Enter')sendMessage()" />
-          <button onclick="sendMessage()" id="send-btn"
-            class="bg-[#e9dd35] hover:bg-[#c4b920] text-[#002f3b] font-semibold px-4 py-3 rounded-xl text-sm transition-colors disabled:opacity-50">
-            Send
-          </button>
-          <button onclick="runPipeline()" id="pipeline-btn" title="Run full 6-agent team analysis"
-            class="bg-[#003f4e] hover:bg-[#004d60] border border-[#e9dd35]/30 hover:border-[#e9dd35]/60 text-[#e9dd35] font-medium px-4 py-3 rounded-xl text-xs transition-colors disabled:opacity-50 whitespace-nowrap">
-            Team Analysis
-          </button>
-        </div>
+      <!-- Input -->
+      <div class="px-3 pb-3 flex gap-2 flex-shrink-0">
+        <input id="chat-input" type="text" placeholder="Ask anything…"
+          class="flex-1 bg-[#003f4e] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#e9dd35]/40"
+          onkeydown="if(event.key==='Enter')sendMessage()" />
+        <button onclick="sendMessage()" id="send-btn"
+          class="bg-[#e9dd35] hover:bg-[#c4b920] text-[#002f3b] font-semibold px-3 py-2.5 rounded-xl text-sm transition-colors">→</button>
+        <button onclick="runPipeline()" id="pipeline-btn" title="Full 6-agent team analysis"
+          class="bg-[#003f4e] border border-[#e9dd35]/30 hover:border-[#e9dd35]/60 text-[#e9dd35] font-medium px-3 py-2.5 rounded-xl text-[10px] transition-colors whitespace-nowrap">
+          Team
+        </button>
       </div>
     </div>
+  </div>
 
     <!-- Pipeline results panel (shown after Team Analysis) -->
     <section id="pipeline-panel" class="hidden">
@@ -889,8 +910,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       const code = selectedCurrCode;
       const rate = fxRates[code] || 1;
       const val = currentPortfolioUSD * rate;
-      const startUSD = 1_000_000;
-      const start = startUSD * rate;
+      const start = startAmount * rate;
       const pnl = val - start;
       const pct = (pnl / start) * 100;
 
@@ -909,8 +929,33 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       const label = document.getElementById('fx-rate-label');
       if (label) {
         label.textContent = code === 'USD'
-          ? 'Starting: $1,000,000 · Oct 1, 2025'
-          : `1 USD = ${rate.toFixed(4)} ${code} · Start: ${sym}${Math.round(startUSD * rate).toLocaleString()}`;
+          ? ''
+          : `1 USD = ${rate.toFixed(4)} ${code} · Start: ${sym}${Math.round(startAmount * rate).toLocaleString()}`;
+      }
+    }
+
+    // ── Floating chat toggle ────────────────────────────────────────────────
+    let chatOpen = false;
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      document.getElementById('chat-bubble').style.display = chatOpen ? 'none' : 'block';
+      const panel = document.getElementById('chat-panel');
+      panel.style.display = chatOpen ? 'flex' : 'none';
+      if (chatOpen) {
+        const msgs = document.getElementById('chat-messages');
+        msgs.scrollTop = msgs.scrollHeight;
+        document.getElementById('chat-input').focus();
+      }
+    }
+
+    // ── Editable portfolio start amount ────────────────────────────────────
+    let startAmount = 1_000_000;
+    function updateStartAmount() {
+      const val = parseFloat(document.getElementById('start-amount-input').value);
+      if (!isNaN(val) && val >= 1000) {
+        startAmount = val;
+        updateCurrencyDisplay();
+        renderBenchmarks();
       }
     }
 
@@ -965,7 +1010,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     }
 
     function renderBenchmarks() {
-      const portReturn = currentPortfolioUSD ? (currentPortfolioUSD - 1_000_000) / 1_000_000 : null;
+      const portReturn = currentPortfolioUSD ? (currentPortfolioUSD - startAmount) / startAmount : null;
       const portPct = portReturn !== null ? portReturn * 100 : null;
 
       const pctStr = (pct) => pct !== null ? (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%' : '—';
@@ -1000,9 +1045,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
 
     async function fetchPrices() {
       try {
-        const r = await fetch(
-          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,hyperliquid,ethereum,solana&vs_currencies=usd&include_24hr_change=true&include_market_cap=false"
-        );
+        const r = await fetch(`${API_BASE}/prices`);
         const d = await r.json();
 
         const btc = d.bitcoin?.usd ?? 0;
@@ -1017,16 +1060,16 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         document.getElementById("hype-price").textContent = "$" + hype.toFixed(2);
         document.getElementById("hype-change").innerHTML = `<span class="${hypeChg >= 0 ? 'price-up' : 'price-down'}">${hypeChg >= 0 ? "+" : ""}${hypeChg.toFixed(2)}% 24h</span>`;
 
-        // Calculate portfolio P&L
+        // Calculate portfolio P&L (weights: 60% BTC, 25% HYPE, 15% stable)
         const btcEntry = 126000, hypeEntry = 50;
-        const btcQty = 600000 / btcEntry;
-        const hypeQty = 250000 / hypeEntry;
+        const btcQty = (startAmount * 0.60) / btcEntry;
+        const hypeQty = (startAmount * 0.25) / hypeEntry;
+        const stableVal = startAmount * 0.15 * 1.06; // 6% APY
         const btcVal = btcQty * btc;
         const hypeVal = hypeQty * hype;
-        const stableVal = 165000;
         const totalVal = btcVal + hypeVal + stableVal;
-        const totalPnl = totalVal - 1000000;
-        const totalPct = (totalPnl / 1000000) * 100;
+        const totalPnl = totalVal - startAmount;
+        const totalPct = (totalPnl / startAmount) * 100;
 
         currentPortfolioUSD = totalVal;
         updateCurrencyDisplay();
