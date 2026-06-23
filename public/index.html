@@ -1112,7 +1112,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         document.getElementById("hype-price").textContent = "$" + hype.toFixed(2);
         document.getElementById("hype-change").innerHTML = `<span class="${hypeChg >= 0 ? 'price-up' : 'price-down'}">${hypeChg >= 0 ? "+" : ""}${hypeChg.toFixed(2)}% 24h</span>`;
 
-        // Calculate portfolio P&L (weights: 60% BTC, 25% HYPE, 15% stable)
+        // Calculate portfolio P&L
         const btcEntry = 126000, hypeEntry = 50;
         const prof = PROFILES[selectedProfile] || PROFILES[5];
         const btcQty = (startAmount * prof.btc / 100) / btcEntry;
@@ -1120,7 +1120,10 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         const stableVal = startAmount * (prof.stable / 100) * 1.06; // 6% APY
         const btcVal = btcQty * btc;
         const hypeVal = hypeQty * hype;
-        const totalVal = btcVal + hypeVal + stableVal;
+        // Alts sleeve (profiles 1-3) awaiting BPF validation — treated as cash at par
+        const deployedPct = (prof.btc + prof.hype + prof.stable) / 100;
+        const undeployedVal = startAmount * (1 - deployedPct);
+        const totalVal = btcVal + hypeVal + stableVal + undeployedVal;
         const totalPnl = totalVal - startAmount;
         const totalPct = (totalPnl / startAmount) * 100;
 
