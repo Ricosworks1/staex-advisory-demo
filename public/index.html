@@ -631,7 +631,7 @@
     <!-- Backtest vs Benchmark -->
     <section id="section-market" class="bg-[#003f4e] rounded-xl p-6 border border-white/5">
       <h3 class="text-white font-semibold mb-1">Performance vs Benchmark</h3>
-      <p class="text-white/40 text-xs mb-5">Oct 1, 2025 → Today · $1,000,000 starting position</p>
+      <p class="text-white/40 text-xs mb-5" id="bench-subtitle">Oct 1, 2025 → Today · $1,000,000 starting position</p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
         <div class="text-center p-4 bg-[#002f3b] rounded-lg border border-[#e9dd35]/20">
           <p class="text-white/40 text-xs mb-2 uppercase tracking-wider">This portfolio</p>
@@ -1062,7 +1062,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
 
       research: `You are the Research Analyst. For each asset the CIO mentioned, give one line: asset name, BPF profitability status, and the one fact from the October 2025 data most relevant to the current query. Max 150 words total.`,
 
-      portfolio_manager: `You are the Portfolio Manager. Translate the CIO's allocation targets into exact position sizes assuming a $1,000,000 portfolio. Show: asset, %, dollar amount, entry thesis in one line. Flag any position that conflicts with risk limits. Max 150 words.`,
+      portfolio_manager: `You are the Portfolio Manager. Translate the CIO's allocation targets into exact position sizes using the client's ACTUAL portfolio size and current state provided in the [LIVE PORTFOLIO STATE] block at the top of the message. Show: asset, %, dollar amount, entry thesis in one line. Flag any position that conflicts with risk limits. Max 150 words.`,
     };
 
     let editingAgent = null;
@@ -1275,21 +1275,21 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     function updateDateLabels() {
       const d = new Date(startDate + 'T00:00:00');
       const label = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      const p = PROFILES[selectedProfile];
       const profileEl = document.getElementById('portfolio-profile-label');
-      if (profileEl) {
-        const p = PROFILES[selectedProfile];
-        profileEl.textContent = `Profile ${selectedProfile} — ${p?.name} · Since ${label}`;
-      }
+      if (profileEl) profileEl.textContent = `Profile ${selectedProfile} — ${p?.name} · Since ${label}`;
       const heroLabel = document.getElementById('hero-profile-label');
-      if (heroLabel) heroLabel.textContent = `6 live agents · Profile ${selectedProfile} — ${PROFILES[selectedProfile]?.name}`;
+      if (heroLabel) heroLabel.textContent = `6 live agents · Profile ${selectedProfile} — ${p?.name}`;
+      const benchEl = document.getElementById('bench-subtitle');
+      if (benchEl) benchEl.textContent = `${label} → Today · $${Number(startAmount).toLocaleString('en-US')} starting position`;
     }
 
     // ── Editable portfolio start amount ────────────────────────────────────
     let startAmount = 1_000_000;
     let selectedProfile = 5;
     let startDate = '2025-10-01';
-    let btcEntryPrice = 63200;  // Oct 1 2025 default
-    let hypeEntryPrice = 2.85;  // Oct 1 2025 default
+    let btcEntryPrice = 114024;  // Oct 1 2025 actual (fetched on load)
+    let hypeEntryPrice = 45.24;  // Oct 1 2025 actual (fetched on load)
 
     const PROFILES = {
       1: { name: 'Pure Option Book', btc: 0,  hype: 100, stable: 0,  desc: 'Max aggressive · 100% thesis · no anchor' },
@@ -1539,7 +1539,11 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         const res = await fetch(`${API_BASE}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: question, agent: currentAgent || 'relationship_manager', allowResearch: true })
+          body: JSON.stringify({
+            message: `${getPortfolioContext()}\n\n[CLIENT QUESTION]: ${question}`,
+            agent: currentAgent || 'relationship_manager',
+            allowResearch: true
+          })
         });
         clearInterval(mobThinkTimer);
         const bubble = thinkDiv.querySelector('div:last-child');
@@ -1557,6 +1561,24 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         bubble.innerHTML = `<p style="color:rgba(255,180,100,0.9);font-size:13px;margin:0;">The advisory team is taking longer than expected. Please try again in a moment.</p>`;
       }
       msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function getPortfolioContext() {
+      const prof = PROFILES[selectedProfile] || PROFILES[5];
+      const altsPct = 100 - prof.btc - prof.hype - prof.stable;
+      const totalValEl = document.getElementById('total-value')?.textContent || '—';
+      const totalPnlEl = document.getElementById('total-pnl')?.textContent || '—';
+      const fmt = n => '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+      return [
+        `[LIVE PORTFOLIO STATE]`,
+        `Entry date: ${startDate}`,
+        `Portfolio size: ${fmt(startAmount)}`,
+        `Profile: ${selectedProfile} — ${prof.name}`,
+        `Allocation: BTC ${prof.btc}% · HYPE ${prof.hype}% · Stable ${prof.stable}%${altsPct > 0 ? ` · Alts/dry powder ${altsPct}%` : ''}`,
+        `Entry prices: BTC ${fmt(btcEntryPrice)} · HYPE $${hypeEntryPrice.toFixed(2)}`,
+        `Current portfolio value: ${totalValEl}`,
+        `Total P&L: ${totalPnlEl}`,
+      ].join('\n');
     }
 
     function syncMobPortfolio() {
@@ -1611,7 +1633,26 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     }
 
     applyProfileUI(); // set initial card visibility for default profile
-    fetchPrices();
+
+    // Fetch correct entry prices for the default date immediately on load
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/historical-prices?date=${startDate}`);
+        const data = await res.json();
+        if (data.btc && data.btc > 0) {
+          btcEntryPrice = data.btc;
+          const el = document.getElementById('btc-entry-display');
+          if (el) el.textContent = '$' + data.btc.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        }
+        if (data.hype && data.hype > 0) {
+          hypeEntryPrice = data.hype;
+          const el = document.getElementById('hype-entry-display');
+          if (el) el.textContent = '$' + data.hype.toFixed(2);
+        }
+      } catch(e) {}
+      fetchPrices();
+    })();
+
     fetchFxRates();
     setInterval(fetchPrices, 60000);
     setInterval(fetchFxRates, 3600000); // hourly FX refresh
@@ -1690,8 +1731,8 @@ No jargon. No hedging language. Confident, direct, actionable.`,
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             message: lastPipelineSynthesis
-              ? `[CONTEXT — most recent Team Analysis output from the Relationship Manager]:\n${lastPipelineSynthesis}\n\n[CLIENT QUESTION]:\n${msg}`
-              : msg,
+              ? `${getPortfolioContext()}\n\n[CONTEXT — most recent Team Analysis]:\n${lastPipelineSynthesis}\n\n[CLIENT QUESTION]:\n${msg}`
+              : `${getPortfolioContext()}\n\n[CLIENT QUESTION]:\n${msg}`,
             agent: currentAgent,
             mandateOverride: getMandateOverride(currentAgent),
             allowResearch: true,
