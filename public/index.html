@@ -881,6 +881,7 @@
       <button class="mob-quick-btn" onclick="mobAsk('What rebalancing would you suggest for my current profile?')">Rebalance advice?</button>
       <button class="mob-quick-btn" onclick="mobAsk('What are the key risk metrics for my portfolio?')">Risk metrics?</button>
     </div>
+    <button onclick="resetPortfolio()" style="width:100%;margin-top:14px;padding:13px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.45);font-size:13px;cursor:pointer;letter-spacing:0.02em;text-align:center;">↺ Change portfolio settings</button>
    </div><!-- /mob-scroll -->
   </div>
 
@@ -1242,6 +1243,13 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     }
 
     // ── Onboarding modal ────────────────────────────────────────────────────
+    function resetPortfolio() {
+      document.getElementById('ob-amount').value = startAmount;
+      document.getElementById('ob-date').value = startDate;
+      document.getElementById('ob-profile').value = selectedProfile;
+      document.getElementById('onboarding-modal').style.display = 'flex';
+    }
+
     async function startSession() {
       const amount = parseFloat(document.getElementById('ob-amount').value);
       if (!isNaN(amount) && amount >= 1000) {
