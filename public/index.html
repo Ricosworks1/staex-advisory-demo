@@ -1539,15 +1539,22 @@ No jargon. No hedging language. Confident, direct, actionable.`,
         const res = await fetch(`${API_BASE}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: question, agent: currentAgent, allowResearch: true })
+          body: JSON.stringify({ message: question, agent: currentAgent || 'relationship_manager', allowResearch: true })
         });
-        const data = await res.json();
         clearInterval(mobThinkTimer);
+        const bubble = thinkDiv.querySelector('div:last-child');
+        if (!res.ok) {
+          bubble.innerHTML = `<p style="color:rgba(255,180,100,0.9);font-size:13px;margin:0;">Server returned ${res.status}. Please try again.</p>`;
+          msgs.scrollTop = msgs.scrollHeight;
+          return;
+        }
+        const data = await res.json();
         const answer = data.response || data.error || 'No response received.';
-        thinkDiv.querySelector('div:last-child').innerHTML = `<p style="color:rgba(255,255,255,0.9);font-size:13px;line-height:1.6;margin:0;white-space:pre-wrap;">${answer}</p>`;
+        bubble.innerHTML = `<p style="color:rgba(255,255,255,0.9);font-size:13px;line-height:1.6;margin:0;white-space:pre-wrap;">${answer}</p>`;
       } catch(e) {
         clearInterval(mobThinkTimer);
-        thinkDiv.querySelector('div:last-child').innerHTML = `<p style="color:rgba(255,100,100,0.8);font-size:13px;margin:0;">Connection error. Please try again.</p>`;
+        const bubble = thinkDiv.querySelector('div:last-child');
+        bubble.innerHTML = `<p style="color:rgba(255,180,100,0.9);font-size:13px;margin:0;">The advisory team is taking longer than expected. Please try again in a moment.</p>`;
       }
       msgs.scrollTop = msgs.scrollHeight;
     }
