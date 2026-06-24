@@ -787,22 +787,26 @@
   </main>
 
   <!-- ── Mobile bottom nav ─────────────────────────────────────── -->
-  <nav id="mobile-nav" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:50; background:#002f3b; border-top:1px solid rgba(255,255,255,0.12); padding:6px 0 8px;" aria-label="Mobile navigation">
-    <div style="display:grid; grid-template-columns:repeat(4,1fr); text-align:center;">
-      <button onclick="switchMobTab('chat')" id="mobnav-chat" style="background:none;border:none;cursor:pointer;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;" class="mobnav-btn active-mob-nav">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e9dd35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  <nav id="mobile-nav" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:50; background:#002f3b; border-top:1px solid rgba(255,255,255,0.12); padding:6px 0 8px; overflow-x:auto; -webkit-overflow-scrolling:touch;" aria-label="Mobile navigation">
+    <div style="display:flex; min-width:max-content; width:100%;">
+      <button onclick="switchMobTab('chat')" id="mobnav-chat" style="background:none;border:none;cursor:pointer;padding:6px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e9dd35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
         <span style="font-size:9px;color:#e9dd35;font-weight:600;letter-spacing:0.04em;">CHAT</span>
       </button>
-      <button onclick="switchMobTab('portfolio')" id="mobnav-portfolio" style="background:none;border:none;cursor:pointer;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;" class="mobnav-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <button onclick="switchMobTab('portfolio')" id="mobnav-portfolio" style="background:none;border:none;cursor:pointer;padding:6px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:72px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         <span style="font-size:9px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:0.04em;">PORTFOLIO</span>
       </button>
-      <button onclick="switchMobTab('market')" id="mobnav-market" style="background:none;border:none;cursor:pointer;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;" class="mobnav-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      <button onclick="switchMobTab('market')" id="mobnav-market" style="background:none;border:none;cursor:pointer;padding:6px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:72px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
         <span style="font-size:9px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:0.04em;">MARKETS</span>
       </button>
-      <button onclick="switchMobTab('team')" id="mobnav-team" style="background:none;border:none;cursor:pointer;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;" class="mobnav-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <button onclick="switchMobTab('thesis')" id="mobnav-thesis" style="background:none;border:none;cursor:pointer;padding:6px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span style="font-size:9px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:0.04em;">THESIS</span>
+      </button>
+      <button onclick="switchMobTab('team')" id="mobnav-team" style="background:none;border:none;cursor:pointer;padding:6px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span style="font-size:9px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:0.04em;">TEAM</span>
       </button>
     </div>
@@ -859,6 +863,80 @@
       <button class="mob-quick-btn" onclick="mobAsk('What alpha is my portfolio generating over the market?')">My alpha vs market?</button>
       <button class="mob-quick-btn" onclick="mobAsk('Which market benchmark should I compare myself to and why?')">Best benchmark for me?</button>
       <button class="mob-quick-btn" onclick="mobAsk('Is HYPE outperforming S&P 500 and Ethereum since my entry?')">HYPE vs ETH vs S&P?</button>
+    </div>
+  </div>
+
+  <!-- ── Mobile tab panel: THESIS ─────────────────────────────── -->
+  <div id="mob-tab-thesis" class="mob-tab-panel">
+    <p style="color:rgba(255,255,255,0.4);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Investment Thesis · BPF Intelligence</p>
+
+    <!-- Token-as-option axioms -->
+    <div style="background:#003f4e;border-radius:14px;border:1px solid rgba(233,221,53,0.2);padding:14px;margin-bottom:10px;">
+      <p style="color:#e9dd35;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">The 4 Axioms</p>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:#e9dd35;font-size:10px;font-family:monospace;min-width:18px;padding-top:1px;">01</span>
+          <p style="color:rgba(255,255,255,0.75);font-size:12px;line-height:1.4;margin:0;">All crypto tokens are options on underlying ideas — most expire zero, a few return 10–100×</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:#e9dd35;font-size:10px;font-family:monospace;min-width:18px;padding-top:1px;">02</span>
+          <p style="color:rgba(255,255,255,0.75);font-size:12px;line-height:1.4;margin:0;">Crypto is winner-takes-all within each category</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:#e9dd35;font-size:10px;font-family:monospace;min-width:18px;padding-top:1px;">03</span>
+          <p style="color:rgba(255,255,255,0.75);font-size:12px;line-height:1.4;margin:0;">Bitcoin is a religion — store of value, not a technology bet</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:#e9dd35;font-size:10px;font-family:monospace;min-width:18px;padding-top:1px;">04</span>
+          <p style="color:rgba(255,255,255,0.75);font-size:12px;line-height:1.4;margin:0;">Tsunamis can't be predicted, only positioned for — the BPF is the seismograph</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active thesis: HYPE -->
+    <div style="background:#003f4e;border-radius:14px;border:1px solid rgba(96,165,250,0.25);padding:14px;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:28px;height:28px;border-radius:8px;background:rgba(96,165,250,0.15);display:flex;align-items:center;justify-content:center;font-size:12px;color:#60a5fa;font-weight:700;">H</div>
+        <div>
+          <p style="color:#fff;font-size:13px;font-weight:600;margin:0;">Hyperliquid (HYPE) — Active Thesis</p>
+          <p style="color:rgba(255,255,255,0.35);font-size:10px;margin:1px 0 0;">BPF June 2026 · Winner-takes-all: DEX</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;">
+          <p style="color:rgba(255,255,255,0.35);font-size:9px;text-transform:uppercase;margin-bottom:2px;">Annualised revenue</p>
+          <p style="color:#4ade80;font-size:13px;font-weight:700;font-family:monospace;margin:0;">$13B</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;">
+          <p style="color:rgba(255,255,255,0.35);font-size:9px;text-transform:uppercase;margin-bottom:2px;">Buyback model</p>
+          <p style="color:#4ade80;font-size:13px;font-weight:700;font-family:monospace;margin:0;">97%</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;">
+          <p style="color:rgba(255,255,255,0.35);font-size:9px;text-transform:uppercase;margin-bottom:2px;">DEX market share</p>
+          <p style="color:#4ade80;font-size:13px;font-weight:700;font-family:monospace;margin:0;">70%</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;">
+          <p style="color:rgba(255,255,255,0.35);font-size:9px;text-transform:uppercase;margin-bottom:2px;">ETF live</p>
+          <p style="color:#4ade80;font-size:13px;font-weight:700;margin:0;">Bitwise BHYP</p>
+        </div>
+      </div>
+      <p style="color:rgba(255,255,255,0.5);font-size:11px;line-height:1.5;margin:0;border-top:1px solid rgba(255,255,255,0.06);padding-top:8px;">Invalidation: DEX market share drops below 40% or fee revenue declines more than 50% QoQ without a structural explanation</p>
+    </div>
+
+    <!-- BPF signal: Bitcoin -->
+    <div style="background:#003f4e;border-radius:14px;border:1px solid rgba(249,115,22,0.2);padding:14px;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:14px;">₿</span>
+        <p style="color:#fff;font-size:13px;font-weight:600;margin:0;">Bitcoin — Religion Anchor</p>
+      </div>
+      <p style="color:rgba(255,255,255,0.55);font-size:11px;line-height:1.5;margin:0;">Store of value, not technology. Hard-cap supply, nation-state adoption, deepest liquidity. Held as the anchor weight in profiles 3–5. BPF signal: subsidy-dependent ($79.8M fees vs $4.2B issuance) — thesis is monetary premium, not fee revenue.</p>
+    </div>
+
+    <div class="mob-quick-actions">
+      <button class="mob-quick-btn" onclick="mobAsk('Explain the token-as-option framework and how it drives asset selection')">Token-as-option explained</button>
+      <button class="mob-quick-btn" onclick="mobAsk('What does the Blockchain Payment Flow analysis say about HYPE right now?')">BPF signal on HYPE?</button>
+      <button class="mob-quick-btn" onclick="mobAsk('What would invalidate the HYPE thesis and when should we exit?')">HYPE exit conditions?</button>
+      <button class="mob-quick-btn" onclick="mobAsk('Which new assets from the BPF are candidates for the next thesis?')">Next BPF candidate?</button>
     </div>
   </div>
 
@@ -1365,7 +1443,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
     // ── Mobile tab navigation ────────────────────────────────────────
     function switchMobTab(tab) {
       // Update panels
-      ['chat','portfolio','market','team'].forEach(t => {
+      ['chat','portfolio','market','thesis','team'].forEach(t => {
         const panel = document.getElementById('mob-tab-' + t);
         const btn = document.getElementById('mobnav-' + t);
         if (panel) panel.classList.toggle('mob-active', t === tab);
