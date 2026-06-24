@@ -31,56 +31,81 @@
 
 /* ── Mobile full-screen tab layout ──────────────────────────────── */
 @media (max-width: 767px) {
-  body { padding-bottom: 68px; }
+  html, body { height: 100%; overflow: hidden; }
+  body { padding-bottom: 0; }
   #mobile-nav { display: flex !important; }
-  main { padding-top: 0 !important; }
-  main > section,
-  main > footer { display: none !important; }
-  .mob-active { display: block !important; }
-  /* Chat tab: hide agent sidebar, show only chat column */
-  #mob-tab-chat .mob-agents { display: none !important; }
-  #mob-tab-chat .mob-chat-col { width: 100% !important; }
-  /* Agent tab: hide chat, show only agents full-width */
-  #mob-tab-team .mob-chat-col { display: none !important; }
-  #mob-tab-team .mob-agents { width: 100% !important; }
-  /* Full-screen tab panels */
+  main { display: none !important; }
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  /* Full-screen panels: flex column, fill exactly between header and nav */
   .mob-tab-panel {
     display: none;
     position: fixed;
-    top: 57px; /* height of header */
+    top: 57px;
     left: 0; right: 0;
-    bottom: 68px;
+    bottom: 60px;
+    flex-direction: column;
+    background: #001e27;
+    z-index: 30;
+  }
+  .mob-tab-panel.mob-active { display: flex; }
+  /* Scrollable inner content */
+  .mob-scroll {
+    flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 16px 12px;
-    background: #001e27;
+    padding: 14px 12px;
   }
-  .mob-tab-panel.mob-active { display: block; }
-  /* Quick action buttons per tab */
+  /* Chat panel layout */
+  #mob-tab-chat { padding: 0; }
+  #mob-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 12px;
+  }
+  .mob-chat-footer {
+    flex-shrink: 0;
+    padding: 10px 12px 12px;
+    background: #001e27;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  /* Quick actions */
   .mob-quick-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 12px;
+    gap: 7px;
+    padding: 8px 12px 12px;
+    flex-shrink: 0;
+    background: #001e27;
   }
   .mob-quick-btn {
     background: #003f4e;
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    color: rgba(255,255,255,0.75);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.7);
     font-size: 11px;
     line-height: 1.3;
-    padding: 10px 10px;
+    padding: 9px 10px;
     text-align: left;
     cursor: pointer;
     transition: border-color 0.15s, color 0.15s;
   }
   .mob-quick-btn:active { border-color: #e9dd35; color: #e9dd35; }
+  /* Thinking animation */
+  @keyframes mob-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+  .mob-dot { width:5px; height:5px; background:rgba(233,221,53,0.7); border-radius:50%; display:inline-block; animation:mob-bounce 1.2s infinite; margin:0 1px; }
+  .mob-dot:nth-child(2){animation-delay:.2s} .mob-dot:nth-child(3){animation-delay:.4s}
+  @keyframes mob-fade { 0%,100%{opacity:.3} 50%{opacity:1} }
+  .mob-thinking-word { animation: mob-fade 1.8s ease-in-out infinite; color: rgba(255,255,255,0.45); font-size:11px; }
+}
+@media (max-width: 767px) {
+  /* Hide desktop-only overlays on mobile */
+  #methodology-modal { display: none !important; }
 }
 @media (min-width: 768px) {
   #mobile-nav { display: none !important; }
   .mob-tab-panel { display: none !important; }
-  main > section, main > footer { display: block !important; }
+  main { display: block !important; }
 }
   </style>
 </head>
@@ -814,24 +839,30 @@
 
   <!-- ── Mobile tab panel: CHAT ────────────────────────────────── -->
   <div id="mob-tab-chat" class="mob-tab-panel mob-active">
-    <p style="color:rgba(255,255,255,0.4);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Advisory Chat</p>
-    <div id="mob-chat-messages" style="background:#003f4e;border-radius:12px;border:1px solid rgba(255,255,255,0.06);padding:14px;margin-bottom:10px;min-height:140px;max-height:38vh;overflow-y:auto;font-size:13px;color:rgba(255,255,255,0.85);line-height:1.5;">
-      <p style="color:rgba(255,255,255,0.35);font-size:12px;">Ask the advisory team anything below, or choose a quick action.</p>
+    <div id="mob-chat-messages">
+      <div style="text-align:center;padding:20px 0 10px;">
+        <div style="width:44px;height:44px;background:#e9dd35;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;color:#002f3b;font-size:18px;margin-bottom:10px;">S</div>
+        <p style="color:#fff;font-size:15px;font-weight:600;margin:0 0 4px;">Crypto Advisory Suite</p>
+        <p style="color:rgba(255,255,255,0.4);font-size:12px;margin:0;">6 live agents · Powered by Staex MCC</p>
+      </div>
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <input id="mob-chat-input" type="text" placeholder="Ask the advisory team…" style="flex:1;background:#003f4e;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" onkeydown="if(event.key==='Enter')mobSendChat()"/>
-      <button onclick="mobSendChat()" style="background:#e9dd35;color:#002f3b;font-weight:700;border:none;border-radius:10px;padding:10px 14px;font-size:13px;cursor:pointer;">Send</button>
-    </div>
-    <div class="mob-quick-actions">
-      <button class="mob-quick-btn" onclick="mobAsk('What is the HYPE thesis and why is it in the portfolio?')">What is the HYPE thesis?</button>
-      <button class="mob-quick-btn" onclick="mobAsk('What is my current risk exposure and max drawdown?')">My risk exposure?</button>
-      <button class="mob-quick-btn" onclick="mobAsk('Should I rebalance now given current market conditions?')">Should I rebalance?</button>
-      <button class="mob-quick-btn" onclick="mobAsk('Explain the token-as-option framework used to select assets')">Token-as-option framework?</button>
+    <div class="mob-chat-footer">
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input id="mob-chat-input" type="text" placeholder="Ask the advisory team…" style="flex:1;background:#003f4e;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:11px 14px;color:#fff;font-size:14px;outline:none;" onkeydown="if(event.key==='Enter')mobSendChat()"/>
+        <button onclick="mobSendChat()" style="background:#e9dd35;color:#002f3b;font-weight:700;border:none;border-radius:10px;padding:11px 16px;font-size:14px;cursor:pointer;white-space:nowrap;">Send</button>
+      </div>
+      <div class="mob-quick-actions" style="padding:0;margin-top:0;">
+        <button class="mob-quick-btn" onclick="mobAsk('What is the HYPE thesis and why is it in the portfolio?')">HYPE thesis?</button>
+        <button class="mob-quick-btn" onclick="mobAsk('What is my current risk exposure and max drawdown?')">My risk exposure?</button>
+        <button class="mob-quick-btn" onclick="mobAsk('Should I rebalance now given current market conditions?')">Should I rebalance?</button>
+        <button class="mob-quick-btn" onclick="mobAsk('Explain the token-as-option framework used to select assets')">Token-as-option?</button>
+      </div>
     </div>
   </div>
 
   <!-- ── Mobile tab panel: PORTFOLIO ──────────────────────────── -->
   <div id="mob-tab-portfolio" class="mob-tab-panel">
+   <div class="mob-scroll">
     <p style="color:rgba(255,255,255,0.4);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Portfolio</p>
     <div style="background:#003f4e;border-radius:14px;border:1px solid rgba(233,221,53,0.2);padding:16px;margin-bottom:10px;">
       <p style="color:rgba(255,255,255,0.4);font-size:11px;margin-bottom:4px;" id="mob-profile-label">Profile 5 — Balanced · Since Oct 2025</p>
@@ -844,30 +875,34 @@
         <p style="color:rgba(255,255,255,0.3);font-size:10px;">Loading portfolio…</p>
       </div>
     </div>
-    <div class="mob-quick-actions">
-      <button class="mob-quick-btn" onclick="mobAsk('Explain my current portfolio P&amp;L in simple terms')">Explain my P&amp;L</button>
+    <div class="mob-quick-actions" style="padding:0;margin-top:0;">
+      <button class="mob-quick-btn" onclick="mobAsk('Explain my current portfolio P&L in simple terms')">Explain my P&L</button>
       <button class="mob-quick-btn" onclick="mobAsk('Which asset in my portfolio is performing best and worst?')">Best vs worst asset?</button>
       <button class="mob-quick-btn" onclick="mobAsk('What rebalancing would you suggest for my current profile?')">Rebalance advice?</button>
       <button class="mob-quick-btn" onclick="mobAsk('What are the key risk metrics for my portfolio?')">Risk metrics?</button>
     </div>
+   </div><!-- /mob-scroll -->
   </div>
 
   <!-- ── Mobile tab panel: MARKETS ────────────────────────────── -->
   <div id="mob-tab-market" class="mob-tab-panel">
+   <div class="mob-scroll">
     <p style="color:rgba(255,255,255,0.4);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Markets · vs Benchmark</p>
     <div id="mob-bench-container" style="background:#003f4e;border-radius:14px;border:1px solid rgba(255,255,255,0.07);padding:14px;margin-bottom:10px;min-height:120px;">
       <p style="color:rgba(255,255,255,0.3);font-size:11px;">Loading benchmarks…</p>
     </div>
-    <div class="mob-quick-actions">
+    <div class="mob-quick-actions" style="padding:0;margin-top:0;">
       <button class="mob-quick-btn" onclick="mobAsk('How does my portfolio compare to simply holding BTC since entry?')">vs BTC buy-hold?</button>
       <button class="mob-quick-btn" onclick="mobAsk('What alpha is my portfolio generating over the market?')">My alpha vs market?</button>
       <button class="mob-quick-btn" onclick="mobAsk('Which market benchmark should I compare myself to and why?')">Best benchmark for me?</button>
       <button class="mob-quick-btn" onclick="mobAsk('Is HYPE outperforming S&P 500 and Ethereum since my entry?')">HYPE vs ETH vs S&P?</button>
     </div>
+   </div><!-- /mob-scroll -->
   </div>
 
   <!-- ── Mobile tab panel: THESIS ─────────────────────────────── -->
   <div id="mob-tab-thesis" class="mob-tab-panel">
+   <div class="mob-scroll">
     <p style="color:rgba(255,255,255,0.4);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Investment Thesis · BPF Intelligence</p>
 
     <!-- Token-as-option axioms -->
@@ -965,12 +1000,13 @@
         <div style="width:7px;height:7px;border-radius:50%;background:#4ade80;margin-left:auto;flex-shrink:0;"></div>
       </div>
     </div>
-    <div class="mob-quick-actions">
+    <div class="mob-quick-actions" style="padding:0;margin-top:0;">
       <button class="mob-quick-btn" onclick="mobAsk('Run a full team analysis on my portfolio right now')">Full team analysis</button>
       <button class="mob-quick-btn" onclick="mobAsk('What does the Quant say about my Sharpe and Sortino ratios?')">Quant: risk ratios?</button>
       <button class="mob-quick-btn" onclick="mobAsk('Relationship Manager: give me my daily portfolio briefing')">Daily briefing</button>
       <button class="mob-quick-btn" onclick="mobAsk('What would the CIO change about my allocation today?')">CIO view today?</button>
     </div>
+   </div><!-- /mob-scroll -->
   </div>
 
   <script>
@@ -1468,41 +1504,51 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       mobAsk(msg);
     }
 
-    function mobAsk(question) {
-      // Switch to chat tab
+    const MOB_THINKING = ['Analyzing BPF data…','Checking thesis…','Reviewing positions…','Computing risk metrics…','Synthesizing signals…','Consulting agent team…','Reading market data…'];
+    let mobThinkIdx = 0, mobThinkTimer = null;
+
+    async function mobAsk(question) {
       switchMobTab('chat');
-      // Fill and send on the desktop chat input (shares the same backend)
-      const desktopInput = document.getElementById('chat-input');
-      if (desktopInput) {
-        desktopInput.value = question;
-        // Display user message in mobile chat
-        const msgs = document.getElementById('mob-chat-messages');
-        if (msgs) {
-          msgs.innerHTML += `<div style="margin-bottom:10px;"><p style="color:rgba(255,255,255,0.4);font-size:10px;margin-bottom:3px;">You</p><p style="color:#fff;font-size:13px;">${question}</p></div>`;
-          msgs.scrollTop = msgs.scrollHeight;
-        }
-        sendMessage(); // use existing sendMessage() function
-        // Hook response display into mobile chat too
-        const observer = new MutationObserver(() => {
-          const desktopMsgs = document.getElementById('chat-messages');
-          if (!desktopMsgs) return;
-          const lastMsg = desktopMsgs.lastElementChild;
-          if (lastMsg && lastMsg.dataset.synced !== 'true') {
-            lastMsg.dataset.synced = 'true';
-            const text = lastMsg.textContent || '';
-            if (text.trim()) {
-              const mobMsgs = document.getElementById('mob-chat-messages');
-              if (mobMsgs) {
-                mobMsgs.innerHTML += `<div style="margin-bottom:10px;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;border-left:2px solid #e9dd35;"><p style="color:rgba(255,255,255,0.4);font-size:10px;margin-bottom:3px;">Advisory Team</p><p style="color:rgba(255,255,255,0.85);font-size:12px;line-height:1.5;">${text.trim()}</p></div>`;
-                mobMsgs.scrollTop = mobMsgs.scrollHeight;
-                observer.disconnect();
-              }
-            }
-          }
+      const msgs = document.getElementById('mob-chat-messages');
+      if (!msgs) return;
+
+      // User bubble
+      const userDiv = document.createElement('div');
+      userDiv.style.cssText = 'margin:0 0 12px;display:flex;justify-content:flex-end;';
+      userDiv.innerHTML = `<div style="background:#003f4e;border-radius:12px 12px 2px 12px;padding:10px 14px;max-width:80%;"><p style="color:#fff;font-size:13px;line-height:1.4;margin:0;">${question}</p></div>`;
+      msgs.appendChild(userDiv);
+      msgs.scrollTop = msgs.scrollHeight;
+
+      // Thinking bubble
+      const thinkDiv = document.createElement('div');
+      thinkDiv.style.cssText = 'margin:0 0 12px;';
+      thinkDiv.innerHTML = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;"><div style="width:22px;height:22px;background:#e9dd35;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#002f3b;font-size:10px;">S</div><span style="color:rgba(255,255,255,0.35);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;">Advisory Team</span></div><div style="background:#003f4e;border-radius:2px 12px 12px 12px;padding:12px 14px;display:inline-block;max-width:90%;"><span class="mob-dot"></span><span class="mob-dot"></span><span class="mob-dot"></span><span class="mob-thinking-word" id="mob-think-word"> ${MOB_THINKING[0]}</span></div>`;
+      msgs.appendChild(thinkDiv);
+      msgs.scrollTop = msgs.scrollHeight;
+
+      // Cycle thinking phrases
+      mobThinkIdx = 0;
+      mobThinkTimer = setInterval(() => {
+        mobThinkIdx = (mobThinkIdx + 1) % MOB_THINKING.length;
+        const el = document.getElementById('mob-think-word');
+        if (el) el.textContent = ' ' + MOB_THINKING[mobThinkIdx];
+      }, 2000);
+
+      try {
+        const res = await fetch(`${API_BASE}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: question, agent: currentAgent, allowResearch: true })
         });
-        const desktopMsgs = document.getElementById('chat-messages');
-        if (desktopMsgs) observer.observe(desktopMsgs, { childList: true, subtree: true, characterData: true });
+        const data = await res.json();
+        clearInterval(mobThinkTimer);
+        const answer = data.response || data.error || 'No response received.';
+        thinkDiv.querySelector('div:last-child').innerHTML = `<p style="color:rgba(255,255,255,0.9);font-size:13px;line-height:1.6;margin:0;white-space:pre-wrap;">${answer}</p>`;
+      } catch(e) {
+        clearInterval(mobThinkTimer);
+        thinkDiv.querySelector('div:last-child').innerHTML = `<p style="color:rgba(255,100,100,0.8);font-size:13px;margin:0;">Connection error. Please try again.</p>`;
       }
+      msgs.scrollTop = msgs.scrollHeight;
     }
 
     function syncMobPortfolio() {
