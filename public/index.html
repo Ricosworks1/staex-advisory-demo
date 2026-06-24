@@ -35,12 +35,12 @@
   body { padding-bottom: 0; }
   #mobile-nav { display: flex !important; }
   main { display: none !important; }
-  header { position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
-  /* Full-screen panels: flex column, fill exactly between header and nav */
+  header { display: none !important; }
+  /* Full-screen panels: flex column, fill exactly between top and nav */
   .mob-tab-panel {
     display: none;
     position: fixed;
-    top: 57px;
+    top: 0;
     left: 0; right: 0;
     bottom: 60px;
     flex-direction: column;
