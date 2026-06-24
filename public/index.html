@@ -631,26 +631,26 @@
     <!-- Backtest vs Benchmark -->
     <section id="section-market" class="bg-[#003f4e] rounded-xl p-6 border border-white/5">
       <h3 class="text-white font-semibold mb-1">Performance vs Benchmark</h3>
-      <p class="text-white/40 text-xs mb-5" id="bench-subtitle">Oct 1, 2025 → Today · $1,000,000 starting position</p>
+      <p class="text-white/40 text-xs mb-5" id="bench-subtitle">Oct 2025 → Today</p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
         <div class="text-center p-4 bg-[#002f3b] rounded-lg border border-[#e9dd35]/20">
           <p class="text-white/40 text-xs mb-2 uppercase tracking-wider">This portfolio</p>
-          <p class="text-xl font-bold text-[#e9dd35] mono" id="perf-portfolio">~$838K</p>
+          <p class="text-xl font-bold text-[#e9dd35] mono" id="perf-portfolio">—</p>
           <p class="text-xs text-white/40 mt-1" id="perf-profile-label">Profile 5</p>
         </div>
         <div class="text-center p-4 bg-[#002f3b] rounded-lg border border-white/5">
           <p class="text-white/40 text-xs mb-2 uppercase tracking-wider">BTC buy-and-hold</p>
-          <p class="text-xl font-bold text-red-400 mono">$508K</p>
-          <p class="text-xs text-white/40 mt-1">-49.2%</p>
+          <p class="text-xl font-bold mono" id="perf-btc-pct">—</p>
+          <p class="text-xs text-white/40 mt-1">since entry</p>
         </div>
         <div class="text-center p-4 bg-[#002f3b] rounded-lg border border-white/5">
-          <p class="text-white/40 text-xs mb-2 uppercase tracking-wider">Equal-weight index</p>
-          <p class="text-xl font-bold text-red-400 mono">$476K</p>
-          <p class="text-xs text-white/40 mt-1">-52.4%</p>
+          <p class="text-white/40 text-xs mb-2 uppercase tracking-wider">BTC + HYPE avg</p>
+          <p class="text-xl font-bold mono" id="perf-index-pct">—</p>
+          <p class="text-xs text-white/40 mt-1">equal-weight</p>
         </div>
         <div class="text-center p-4 bg-[#002f3b] rounded-lg border border-[#e9dd35]/10">
           <p class="text-white/40 text-xs mb-2 uppercase tracking-wider">Alpha generated</p>
-          <p class="text-xl font-bold text-green-400 mono">+$330K</p>
+          <p class="text-xl font-bold mono" id="perf-alpha-pct">—</p>
           <p class="text-xs text-white/40 mt-1">vs BTC benchmark</p>
         </div>
       </div>
@@ -1293,7 +1293,7 @@ No jargon. No hedging language. Confident, direct, actionable.`,
       const heroLabel = document.getElementById('hero-profile-label');
       if (heroLabel) heroLabel.textContent = `6 live agents · Profile ${selectedProfile} — ${p?.name}`;
       const benchEl = document.getElementById('bench-subtitle');
-      if (benchEl) benchEl.textContent = `${label} → Today · $${Number(startAmount).toLocaleString('en-US')} starting position`;
+      if (benchEl) benchEl.textContent = `${label} → Today`;
     }
 
     // ── Editable portfolio start amount ────────────────────────────────────
@@ -1479,13 +1479,28 @@ No jargon. No hedging language. Confident, direct, actionable.`,
 
         currentPortfolioUSD = totalVal;
         updateCurrencyDisplay();
-        document.getElementById("perf-portfolio").textContent = "$" + Math.round(totalVal / 1000) + "K";
+
+        const pctStr = p => (p >= 0 ? "+" : "") + p.toFixed(1) + "%";
+        const pctColor = p => p >= 0 ? "#4ade80" : "#f87171";
+
+        const perfPortEl = document.getElementById("perf-portfolio");
+        if (perfPortEl) { perfPortEl.textContent = pctStr(totalPct); perfPortEl.style.color = pctColor(totalPct); }
 
         const btcPnlPct = ((btc - btcEntry) / btcEntry * 100);
-        document.getElementById("btc-pnl").innerHTML = `<span class="${btcPnlPct >= 0 ? 'price-up' : 'price-down'}">${btcPnlPct >= 0 ? "+" : ""}${btcPnlPct.toFixed(1)}% since entry</span>`;
+        document.getElementById("btc-pnl").innerHTML = `<span class="${btcPnlPct >= 0 ? 'price-up' : 'price-down'}">${pctStr(btcPnlPct)} since entry</span>`;
 
         const hypePnlPct = ((hype - hypeEntry) / hypeEntry * 100);
-        document.getElementById("hype-pnl").innerHTML = `<span class="${hypePnlPct >= 0 ? 'price-up' : 'price-down'}">${hypePnlPct >= 0 ? "+" : ""}${hypePnlPct.toFixed(1)}% since entry</span>`;
+        document.getElementById("hype-pnl").innerHTML = `<span class="${hypePnlPct >= 0 ? 'price-up' : 'price-down'}">${pctStr(hypePnlPct)} since entry</span>`;
+
+        const eqWeightPct = (btcPnlPct + hypePnlPct) / 2;
+        const alphaPct = totalPct - btcPnlPct;
+
+        const perfBtcEl = document.getElementById("perf-btc-pct");
+        if (perfBtcEl) { perfBtcEl.textContent = pctStr(btcPnlPct); perfBtcEl.style.color = pctColor(btcPnlPct); }
+        const perfIdxEl = document.getElementById("perf-index-pct");
+        if (perfIdxEl) { perfIdxEl.textContent = pctStr(eqWeightPct); perfIdxEl.style.color = pctColor(eqWeightPct); }
+        const perfAlphaEl = document.getElementById("perf-alpha-pct");
+        if (perfAlphaEl) { perfAlphaEl.textContent = (alphaPct >= 0 ? "+" : "") + alphaPct.toFixed(1) + "pp"; perfAlphaEl.style.color = pctColor(alphaPct); }
 
         currentBTCPrice = btc;
         currentHYPEPrice = hype;
